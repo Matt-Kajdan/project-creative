@@ -58,4 +58,4 @@ const UsersController = {
   getUserById: getUserById
 };
 
-module.exports = UsersController;
+module.exports = { upsertMe };

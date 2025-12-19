@@ -5,6 +5,9 @@ const cors = require("cors");
 const requireAuth = require("./middleware/requireAuth");
 const usersRouter = require("./routes/users");
 const meRouter = require("./routes/me");
+// added for Home Page
+const homeRouter = require("./routes/home");
+
 // const quizzesRouter = require("./routes/quizzes");
 
 const app = express();
@@ -22,7 +25,7 @@ app.get("/health", (_req, res) => {
 app.use(requireAuth);
 // ----------------------------------------------------
 
-
+app.use("/home", homeRouter);
 app.use("/me", meRouter);
 app.use("/users", usersRouter);
 // app.use("/quizzes", quizzesRouter);

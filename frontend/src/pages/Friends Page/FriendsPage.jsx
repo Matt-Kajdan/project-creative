@@ -87,7 +87,6 @@ export default function FriendsPage() {
             </h1>
             <p className="text-gray-300 text-base sm:text-lg px-4">Connect and compete with your friends</p>
           </div>
-
           {(friends.length > 0 || pending.length > 0) && (
             <div className="mb-6 sm:mb-8 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-3xl mx-auto px-4">
               <div className="bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/20">
@@ -100,9 +99,7 @@ export default function FriendsPage() {
               </div>
             </div>
           )}
-
           <div className="max-w-5xl mx-auto px-4 space-y-8 sm:space-y-12">
-            {/* Your Friends Section */}
             <section>
               <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">Your Friends</h2>
               {friends.length === 0 ? (

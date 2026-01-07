@@ -336,8 +336,6 @@ export default function ProfilePage() {
             <div className="text-gray-300 text-sm">Average Score</div>
           </div>
         </div>
-
-        {/* Quizzes Taken Section */}
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20 mb-6 sm:mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Quizzes Taken</h2>
           {takenQuizzes.length === 0 ? (
@@ -401,8 +399,6 @@ export default function ProfilePage() {
             </div>
           )}
         </div>
-
-        {/* Quizzes Created Section */}
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Quizzes Created</h2>
           {createdQuizzes.length === 0 ? (

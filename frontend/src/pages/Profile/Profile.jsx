@@ -89,6 +89,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     loadFriendState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loggedInUser, profile, myUserId]);
 
   useEffect(() => {

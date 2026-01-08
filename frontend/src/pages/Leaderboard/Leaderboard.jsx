@@ -3,11 +3,12 @@ import { getLeaderboard } from "../../services/quizzes";
 
 const columns = [
   { key: "username", label: "Player", isNumeric: false },
-  { key: "avgPercent", label: "Avg %", isNumeric: true },
-  { key: "bestPercent", label: "Best %", isNumeric: true },
-  { key: "totalCorrect", label: "Total Correct", isNumeric: true },
-  { key: "attemptsCount", label: "Attempts", isNumeric: true },
-  { key: "quizzesTaken", label: "Quizzes", isNumeric: true }
+  { key: "avgPercent", label: "Average Score", isNumeric: true },
+  // { key: "bestPercent", label: "Best %", isNumeric: true },
+  { key: "totalCorrect", label: "Correct Answers", isNumeric: true },
+  { key: "attemptsCount", label: "Total Attempts", isNumeric: true },
+  { key: "quizzesTaken", label: "Quizzes Taken", isNumeric: true },
+  { key: "quizzesCreated", label: "Quizzes Created", isNumeric: true }
 ];
 
 export default function LeaderboardPage() {
@@ -154,12 +155,13 @@ export default function LeaderboardPage() {
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20">
-          <div className="overflow-hidden rounded-2xl border border-white/20 bg-white/5">
-            <table className="w-full text-sm sm:text-base">
+          <div className="rounded-2xl border border-white/20 bg-white/5 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[640px] text-sm sm:text-base">
               <thead className="bg-white/10 text-left text-gray-200">
                 <tr>
                   {columns.map((column) => (
-                    <th key={column.key} className="px-4 py-3">
+                    <th key={column.key} className="px-3 sm:px-4 py-3">
                       <button
                         type="button"
                         onClick={() => handleSort(column.key)}
@@ -175,24 +177,25 @@ export default function LeaderboardPage() {
               <tbody className="divide-y divide-white/10 text-gray-100">
                 {sortedRows.length === 0 ? (
                   <tr>
-                    <td className="px-4 py-4 text-center text-gray-300" colSpan={columns.length}>
+                    <td className="px-3 sm:px-4 py-4 text-center text-gray-300" colSpan={columns.length}>
                       No leaderboard data yet.
                     </td>
                   </tr>
                 ) : (
                   sortedRows.map((entry) => (
                     <tr key={entry.user_id}>
-                      <td className="px-4 py-3 font-medium text-white">{entry.username}</td>
-                      <td className="px-4 py-3">{Math.round(entry.avgPercent)}%</td>
-                      <td className="px-4 py-3">{Math.round(entry.bestPercent)}%</td>
-                      <td className="px-4 py-3">{entry.totalCorrect}</td>
-                      <td className="px-4 py-3">{entry.attemptsCount}</td>
-                      <td className="px-4 py-3">{entry.quizzesTaken}</td>
+                      <td className="px-3 sm:px-4 py-3 font-medium text-white">{entry.username}</td>
+                      <td className="px-3 sm:px-4 py-3">{Math.round(entry.avgPercent)}%</td>
+                      <td className="px-3 sm:px-4 py-3">{entry.totalCorrect}</td>
+                      <td className="px-3 sm:px-4 py-3">{entry.attemptsCount}</td>
+                      <td className="px-3 sm:px-4 py-3">{entry.quizzesTaken}</td>
+                      <td className="px-3 sm:px-4 py-3">{entry.quizzesCreated}</td>
                     </tr>
                   ))
                 )}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
       </main>

@@ -106,7 +106,7 @@ const seed = async () => {
         title: "Guess the Artist",
         category: "art",
         created_by: jane._id,
-        req_to_pass: 3,
+        req_to_pass: 6,
         questions: [
           {
             text: "Which of these artists founded the Cubist movement?",
@@ -143,6 +143,42 @@ const seed = async () => {
               { text: "Edvard Munch", is_correct: false },
               { text: "Vincent van Gogh", is_correct: false },
             ]),
+          },
+          {
+            text: "Who painted 'The Starry Night'?",
+            answers: addAnswerIds([
+              { text: "Pablo Picasso", is_correct: false },
+              { text: "Claude Monet", is_correct: false },
+              { text: "Vincent van Gogh", is_correct: true },
+              { text: "Paul Gauguin", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which artist created 'The Persistence of Memory'?",
+            answers: addAnswerIds([
+              { text: "Henri Matisse", is_correct: false },
+              { text: "Salvador Dalí", is_correct: true },
+              { text: "Edvard Munch", is_correct: false },
+              { text: "Grant Wood", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which artist painted the series 'Water Lilies'?",
+            answers: addAnswerIds([
+              { text: "Edgar Degas", is_correct: false },
+              { text: "Paul Cezanne", is_correct: false },
+              { text: "Claude Monet", is_correct: true },
+              { text: "Gustav Klimt", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which artist painted 'American Gothic'?",
+            answers: addAnswerIds([
+              { text: "Edward Hopper", is_correct: false },
+              { text: "Georgia O'Keeffe", is_correct: false },
+              { text: "Andrew Wyeth", is_correct: false },
+              { text: "Grant Wood", is_correct: true },
+            ]),
           }
         ],
       },
@@ -151,7 +187,7 @@ const seed = async () => {
         title: "The Skeletal System",
         category: "science",
         created_by: alice._id,
-        req_to_pass: 3,
+        req_to_pass: 6,
         questions: [
           {
             text: "What is the jawbone more formally known as?",
@@ -188,6 +224,42 @@ const seed = async () => {
               { text: "Stapes", is_correct: false },
               { text: "Ulna", is_correct: false },
             ]),
+          },
+          {
+            text: "What is the smallest bone in the human body?",
+            answers: addAnswerIds([
+              { text: "Ulna", is_correct: false },
+              { text: "Stapes", is_correct: true },
+              { text: "Humerus", is_correct: false },
+              { text: "Fibula", is_correct: false },
+            ]),
+          },
+          {
+            text: "How many bones are in the adult human body?",
+            answers: addAnswerIds([
+              { text: "198", is_correct: false },
+              { text: "212", is_correct: false },
+              { text: "206", is_correct: true },
+              { text: "186", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which bone connects the sternum to the shoulder?",
+            answers: addAnswerIds([
+              { text: "Scapula", is_correct: false },
+              { text: "Clavicle", is_correct: true },
+              { text: "Radius", is_correct: false },
+              { text: "Pelvis", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which bone protects the brain?",
+            answers: addAnswerIds([
+              { text: "Mandible", is_correct: false },
+              { text: "Sternum", is_correct: false },
+              { text: "Cranium", is_correct: true },
+              { text: "Vertebrae", is_correct: false },
+            ]),
           }
         ],
       },
@@ -196,7 +268,7 @@ const seed = async () => {
         title: "Thermodynamics",
         category: "science",
         created_by: alice._id,
-        req_to_pass: 3,
+        req_to_pass: 6,
         questions: [
           {
             text: "What is commonly described as the measure of disorder or randomness?",
@@ -233,6 +305,42 @@ const seed = async () => {
               { text: "5", is_correct: false },
               { text: "6", is_correct: false },
             ]),
+          },
+          {
+            text: "Which law of thermodynamics states that energy is conserved?",
+            answers: addAnswerIds([
+              { text: "Second Law", is_correct: false },
+              { text: "Third Law", is_correct: false },
+              { text: "First Law", is_correct: true },
+              { text: "Zeroth Law", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which law says entropy of an isolated system tends to increase?",
+            answers: addAnswerIds([
+              { text: "First Law", is_correct: false },
+              { text: "Second Law", is_correct: true },
+              { text: "Third Law", is_correct: false },
+              { text: "Zeroth Law", is_correct: false },
+            ]),
+          },
+          {
+            text: "What is the SI unit of temperature?",
+            answers: addAnswerIds([
+              { text: "Celsius", is_correct: false },
+              { text: "Fahrenheit", is_correct: false },
+              { text: "Rankine", is_correct: false },
+              { text: "Kelvin", is_correct: true },
+            ]),
+          },
+          {
+            text: "The Zeroth Law of Thermodynamics deals with what concept?",
+            answers: addAnswerIds([
+              { text: "Heat capacity", is_correct: false },
+              { text: "Thermal equilibrium", is_correct: true },
+              { text: "Entropy increase", is_correct: false },
+              { text: "Energy conversion", is_correct: false },
+            ]),
           }
         ],
       },
@@ -241,7 +349,7 @@ const seed = async () => {
         title: "Renaissance Art",
         category: "art",
         created_by: jane._id,
-        req_to_pass: 3,
+        req_to_pass: 6,
         questions: [
           {
             text: "Who painted the ceiling of the Sistine Chapel?",
@@ -278,6 +386,42 @@ const seed = async () => {
               { text: "Resistance", is_correct: false },
               { text: "Noble", is_correct: false },
             ]),
+          },
+          {
+            text: "Who painted the 'Mona Lisa'?",
+            answers: addAnswerIds([
+              { text: "Raphael", is_correct: false },
+              { text: "Leonardo da Vinci", is_correct: true },
+              { text: "Sandro Botticelli", is_correct: false },
+              { text: "Titian", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which artist painted 'The Birth of Venus'?",
+            answers: addAnswerIds([
+              { text: "Leonardo da Vinci", is_correct: false },
+              { text: "Raphael", is_correct: false },
+              { text: "Donatello", is_correct: false },
+              { text: "Sandro Botticelli", is_correct: true },
+            ]),
+          },
+          {
+            text: "Which artist sculpted 'David'?",
+            answers: addAnswerIds([
+              { text: "Donatello", is_correct: false },
+              { text: "Michelangelo", is_correct: true },
+              { text: "Gian Lorenzo Bernini", is_correct: false },
+              { text: "Filippo Brunelleschi", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which artist is known for developing the sfumato technique?",
+            answers: addAnswerIds([
+              { text: "Raphael", is_correct: false },
+              { text: "Albrecht Durer", is_correct: false },
+              { text: "Leonardo da Vinci", is_correct: true },
+              { text: "Caravaggio", is_correct: false },
+            ]),
           } 
         ],
       },
@@ -286,7 +430,7 @@ const seed = async () => {
         title: "Western Classical Music",
         category: "music",
         created_by: barney._id,
-        req_to_pass: 3,
+        req_to_pass: 6,
         questions: [
           {
             text: "Which of these periods was the earliest?",
@@ -323,6 +467,42 @@ const seed = async () => {
               { text: "Claude Debussy", is_correct: false },
               { text: "Erik Satie", is_correct: true },
             ]),
+          },
+          {
+            text: "Who composed 'The Four Seasons'?",
+            answers: addAnswerIds([
+              { text: "Johann Sebastian Bach", is_correct: false },
+              { text: "Antonio Vivaldi", is_correct: true },
+              { text: "George Frideric Handel", is_correct: false },
+              { text: "Joseph Haydn", is_correct: false },
+            ]),
+          },
+          {
+            text: "Who composed Symphony No. 5?",
+            answers: addAnswerIds([
+              { text: "Wolfgang Amadeus Mozart", is_correct: false },
+              { text: "Franz Schubert", is_correct: false },
+              { text: "Johannes Brahms", is_correct: false },
+              { text: "Ludwig van Beethoven", is_correct: true },
+            ]),
+          },
+          {
+            text: "Which opera was composed by Mozart?",
+            answers: addAnswerIds([
+              { text: "Carmen", is_correct: false },
+              { text: "La Traviata", is_correct: false },
+              { text: "The Magic Flute", is_correct: true },
+              { text: "Tannhauser", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which period followed the Baroque era?",
+            answers: addAnswerIds([
+              { text: "Renaissance", is_correct: false },
+              { text: "Classical", is_correct: true },
+              { text: "Romantic", is_correct: false },
+              { text: "Modern", is_correct: false },
+            ]),
           } 
         ],
       },
@@ -331,7 +511,7 @@ const seed = async () => {
         title: "Brazilian History",
         category: "history",
         created_by: alice._id,
-        req_to_pass: 3,
+        req_to_pass: 6,
         questions: [
           {
             text: "What year did Brazil gain independence from Portugal?",
@@ -368,6 +548,42 @@ const seed = async () => {
               { text: "Uruguay", is_correct: true },
               { text: "Suriname", is_correct: false },
             ]),
+          },
+          {
+            text: "Who proclaimed Brazil's independence?",
+            answers: addAnswerIds([
+              { text: "Dom Pedro II", is_correct: false },
+              { text: "Dom Pedro I", is_correct: true },
+              { text: "Getulio Vargas", is_correct: false },
+              { text: "Jose Bonifacio", is_correct: false },
+            ]),
+          },
+          {
+            text: "In what year did Brazil become a republic?",
+            answers: addAnswerIds([
+              { text: "1822", is_correct: false },
+              { text: "1930", is_correct: false },
+              { text: "1889", is_correct: true },
+              { text: "1960", is_correct: false },
+            ]),
+          },
+          {
+            text: "In what year was slavery abolished in Brazil?",
+            answers: addAnswerIds([
+              { text: "1878", is_correct: false },
+              { text: "1898", is_correct: false },
+              { text: "1868", is_correct: false },
+              { text: "1888", is_correct: true },
+            ]),
+          },
+          {
+            text: "In what year did Brasilia become the capital of Brazil?",
+            answers: addAnswerIds([
+              { text: "1945", is_correct: false },
+              { text: "1960", is_correct: true },
+              { text: "1972", is_correct: false },
+              { text: "1936", is_correct: false },
+            ]),
           } 
         ],
       },
@@ -376,7 +592,7 @@ const seed = async () => {
         title: "Cocktails",
         category: "other",
         created_by: jane._id,
-        req_to_pass: 3,
+        req_to_pass: 6,
         questions: [
           {
             text: "A Negroni is composed of which 3 components?",
@@ -413,6 +629,42 @@ const seed = async () => {
               { text: "Irish", is_correct: false },
               { text: "Bourbon", is_correct: true },
             ]),
+          },
+          {
+            text: "What is the base spirit in a Margarita?",
+            answers: addAnswerIds([
+              { text: "Vodka", is_correct: false },
+              { text: "Rum", is_correct: false },
+              { text: "Tequila", is_correct: true },
+              { text: "Gin", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which cocktail is made with vodka, coffee liqueur, and cream?",
+            answers: addAnswerIds([
+              { text: "Espresso Martini", is_correct: false },
+              { text: "White Russian", is_correct: true },
+              { text: "Black Russian", is_correct: false },
+              { text: "Moscow Mule", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which cocktail traditionally includes mint, lime, sugar, and rum?",
+            answers: addAnswerIds([
+              { text: "Mai Tai", is_correct: false },
+              { text: "Old Fashioned", is_correct: false },
+              { text: "Sazerac", is_correct: false },
+              { text: "Mojito", is_correct: true },
+            ]),
+          },
+          {
+            text: "Which cocktail is a classic mix of gin and tonic water?",
+            answers: addAnswerIds([
+              { text: "Tom Collins", is_correct: false },
+              { text: "Gin and Tonic", is_correct: true },
+              { text: "French 75", is_correct: false },
+              { text: "Gimlet", is_correct: false },
+            ]),
           } 
         ],
       },
@@ -421,7 +673,7 @@ const seed = async () => {
         title: "History of Coffee",
         category: "history",
         created_by: alice._id,
-        req_to_pass: 3,
+        req_to_pass: 6,
         questions: [
           {
             text: "In which country does coffee originate?",
@@ -458,6 +710,42 @@ const seed = async () => {
               { text: "Cambridge University", is_correct: false },
               { text: "National Theatre", is_correct: false },
             ]),
+          },
+          {
+            text: "Which country is the largest coffee producer today?",
+            answers: addAnswerIds([
+              { text: "Ethiopia", is_correct: false },
+              { text: "Vietnam", is_correct: false },
+              { text: "Brazil", is_correct: true },
+              { text: "Colombia", is_correct: false },
+            ]),
+          },
+          {
+            text: "Coffee was first commercially cultivated in which country?",
+            answers: addAnswerIds([
+              { text: "Italy", is_correct: false },
+              { text: "Ethiopia", is_correct: false },
+              { text: "Yemen", is_correct: true },
+              { text: "India", is_correct: false },
+            ]),
+          },
+          {
+            text: "The name 'cappuccino' comes from which group?",
+            answers: addAnswerIds([
+              { text: "Cistercian monks", is_correct: false },
+              { text: "Capuchin monks", is_correct: true },
+              { text: "Benedictine monks", is_correct: false },
+              { text: "Franciscan monks", is_correct: false },
+            ]),
+          },
+          {
+            text: "Espresso originated in which country?",
+            answers: addAnswerIds([
+              { text: "France", is_correct: false },
+              { text: "Turkey", is_correct: false },
+              { text: "Italy", is_correct: true },
+              { text: "Austria", is_correct: false },
+            ]),
           } 
         ],
       },
@@ -466,7 +754,7 @@ const seed = async () => {
         title: "Bossa Nova",
         category: "music",
         created_by: barney._id,
-        req_to_pass: 3,
+        req_to_pass: 6,
         questions: [
           {
             text: "Who is considered the 'father of bossa nova'?",
@@ -503,6 +791,42 @@ const seed = async () => {
               { text: "Miles Davis", is_correct: false },
               { text: "Glenn Miller", is_correct: false },
             ]),
+          },
+          {
+            text: "Bossa nova emerged in Brazil during which decade?",
+            answers: addAnswerIds([
+              { text: "1930s", is_correct: false },
+              { text: "1950s", is_correct: true },
+              { text: "1970s", is_correct: false },
+              { text: "1990s", is_correct: false },
+            ]),
+          },
+          {
+            text: "Who composed 'The Girl from Ipanema'?",
+            answers: addAnswerIds([
+              { text: "João Gilberto", is_correct: false },
+              { text: "Chico Buarque", is_correct: false },
+              { text: "Antônio Carlos Jobim", is_correct: true },
+              { text: "Caetano Veloso", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which album helped popularize bossa nova worldwide?",
+            answers: addAnswerIds([
+              { text: "Bossa Nova Worldwide", is_correct: false },
+              { text: "Construção", is_correct: false },
+              { text: "Getz/Gilberto", is_correct: true },
+              { text: "O Descobridor dos Sete Mares", is_correct: false },
+            ]),
+          },
+          {
+            text: "Bossa nova is best described as a blend of samba and what?",
+            answers: addAnswerIds([
+              { text: "Rock", is_correct: false },
+              { text: "Reggae", is_correct: false },
+              { text: "Jazz", is_correct: true },
+              { text: "Funk", is_correct: false },
+            ]),
           } 
         ],
       },
@@ -511,7 +835,7 @@ const seed = async () => {
         title: "Mexican Cuisine",
         category: "other",
         created_by: barney._id,
-        req_to_pass: 3,
+        req_to_pass: 6,
         questions: [
           {
             text: "Which one of these dishes is not Mexican?",
@@ -547,6 +871,42 @@ const seed = async () => {
               { text: "Chiles en Nogada", is_correct: true },
               { text: "Barbacoa", is_correct: false },
               { text: "Chanclas Poblanas", is_correct: false },
+            ]),
+          },
+          {
+            text: "What is the corn dough used for tortillas called?",
+            answers: addAnswerIds([
+              { text: "Semolina", is_correct: false },
+              { text: "Masa", is_correct: true },
+              { text: "Polenta", is_correct: false },
+              { text: "Arepa", is_correct: false },
+            ]),
+          },
+          {
+            text: "Guacamole is primarily made from what ingredient?",
+            answers: addAnswerIds([
+              { text: "Tomato", is_correct: false },
+              { text: "Cucumber", is_correct: false },
+              { text: "Avocado", is_correct: true },
+              { text: "Zucchini", is_correct: false },
+            ]),
+          },
+          {
+            text: "Which cheese is commonly used in Mexican dishes?",
+            answers: addAnswerIds([
+              { text: "Brie", is_correct: false },
+              { text: "Gouda", is_correct: false },
+              { text: "Havarti", is_correct: false },
+              { text: "Queso fresco", is_correct: true },
+            ]),
+          },
+          {
+            text: "Tacos al pastor were influenced by which cuisine?",
+            answers: addAnswerIds([
+              { text: "Japanese", is_correct: false },
+              { text: "Lebanese", is_correct: true },
+              { text: "Indian", is_correct: false },
+              { text: "Spanish", is_correct: false },
             ]),
           } 
         ],

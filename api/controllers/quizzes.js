@@ -102,6 +102,17 @@ async function getLeaderboard(req, res) {
       },
       { $unwind: "$user" },
       {
+        $lookup: {
+          from: "quizzes",
+          let: { userId: "$user_id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$created_by", "$$userId"] } } },
+            { $count: "count" }
+          ],
+          as: "createdQuizzes"
+        }
+      },
+      {
         $project: {
           user_id: 1,
           username: "$user.username",
@@ -109,6 +120,9 @@ async function getLeaderboard(req, res) {
           totalQuestions: 1,
           attemptsCount: 1,
           quizzesTaken: 1,
+          quizzesCreated: {
+            $ifNull: [{ $arrayElemAt: ["$createdQuizzes.count", 0] }, 0]
+          },
           bestPercent: 1,
           avgPercent: 1
         }

@@ -248,3 +248,6 @@ No auth logic here. It’s already enforced globally.
 - `api/controllers/*` - always use `req.user.uid`
 ### Extra explainer
 Internally, `apiFetch` retrieves the Firebase ID token from the current session and sends it as an `Authorization: Bearer <token>` header. The backend verifies this token once per request.
+
+### Deployment instructions
+The project is deployed on Reder under www.quizr.fun

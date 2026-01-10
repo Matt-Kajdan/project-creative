@@ -199,6 +199,11 @@ useEffect(() => {
               const difficultyKey = difficultyChips[quiz?.difficulty] ? quiz.difficulty : "medium";
               const difficulty = difficultyChips[difficultyKey];
               const isFavourited = favouriteIds.includes(quiz._id);
+              const authorIsDeleted = Boolean(quiz?.created_by?.is_placeholder);
+              const authorName = authorIsDeleted
+                ? "Deleted user"
+                : quiz?.created_by?.username || "Unknown";
+              const canNavigateToAuthor = !authorIsDeleted && Boolean(quiz?.created_by?.username);
               return (
                 <Link
                   key={quiz._id}
@@ -271,13 +276,13 @@ useEffect(() => {
                             onClick={(event) => {
                               event.preventDefault();
                               event.stopPropagation();
-                              if (quiz?.created_by?.username) {
-                                navigate(`/users/${quiz.created_by.username}`);
-                              }
+                              if (!canNavigateToAuthor) return;
+                              navigate(`/users/${authorName}`);
                             }}
-                            className="rounded-lg px-3 py-1.5 transition-colors hover:bg-white/10 hover:text-white hover:backdrop-blur"
+                            disabled={!canNavigateToAuthor}
+                            className={`rounded-lg px-3 py-1.5 transition-colors ${canNavigateToAuthor ? "hover:bg-white/10 hover:text-white hover:backdrop-blur" : "cursor-default text-white/60"}`}
                           >
-                            <span>By {quiz?.created_by?.username}</span>
+                            <span>By {authorName}</span>
                           </button>
                         </div>
                       </div>

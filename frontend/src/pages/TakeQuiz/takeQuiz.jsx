@@ -69,6 +69,11 @@ const isQuizOwner = useMemo(() => {
     : quiz.created_by?._id;
     return creatorId === currentUserId;
 }, [quiz, currentUserId]);
+const authorIsDeleted = Boolean(quiz?.created_by?.is_placeholder);
+const authorName = authorIsDeleted
+  ? "Deleted user"
+  : quiz?.created_by?.username || "Unknown";
+const canNavigateToAuthor = !authorIsDeleted && Boolean(quiz?.created_by?.username);
 const leaderboard = useMemo(() => {
     const attempts = Array.isArray(quiz?.attempts) ? quiz.attempts : [];
     const questionsCount = Array.isArray(quiz?.questions) ? quiz.questions.length : 0;
@@ -378,10 +383,16 @@ return (
             </div>
             <button
                 type="button"
-                onClick={() => navigate(`/users/${quiz.created_by.username}`)}
-                className="self-start sm:self-auto rounded-full px-3 py-1.5 text-xs font-semibold text-white transition-all hover:bg-white/20"
+                onClick={() => {
+                  if (!canNavigateToAuthor) return;
+                  navigate(`/users/${authorName}`);
+                }}
+                disabled={!canNavigateToAuthor}
+                className={`self-start sm:self-auto rounded-full px-3 py-1.5 text-xs font-semibold text-white transition-all ${
+                  canNavigateToAuthor ? "hover:bg-white/20" : "cursor-default text-white/60"
+                }`}
             >
-                Created by {quiz.created_by.username}
+                Created by {authorName}
             </button>
             </div>
             <div className="p-6 sm:p-8">

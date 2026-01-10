@@ -493,6 +493,26 @@ return (
             {isQuizOwner && (
             <>
                 <button
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+                type="button"
+                onClick={() => navigate(`/quiz/${id}/edit`, { state: { from: "quiz", returnTo: `/quiz/${id}` } })}
+                >
+                <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                >
+                    <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.862 4.487a2 2 0 112.828 2.828L8.828 18.175a4 4 0 01-1.414.944l-3.536 1.178 1.178-3.536a4 4 0 01.944-1.414L16.862 4.487z"
+                    />
+                </svg>
+                <span>Edit Quiz</span>
+                </button>
+                <button
                 className="w-full sm:w-auto px-6 py-3 rounded-full bg-rose-500/20 border border-rose-400/50 text-rose-200 font-semibold hover:bg-rose-500/30 transition-all flex items-center justify-center gap-2"
                 type="button"
                 onClick={() => setShowDeleteConfirm(true)}
@@ -515,7 +535,7 @@ return (
                 {showDeleteConfirm && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
                     <div className="bg-slate-800 rounded-2xl border border-white/20 p-6 max-w-md w-full shadow-2xl">
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-3 mb-4 text-left">
                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-rose-500/20">
                         <svg
                             className="h-6 w-6 text-rose-400"

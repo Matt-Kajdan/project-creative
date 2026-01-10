@@ -37,6 +37,10 @@ export function QuizStats({ quiz, onClose }) {
     else scoreDistribution.poor++;
   });
 
+  const authorName = quiz?.created_by?.is_placeholder
+    ? "Deleted user"
+    : quiz?.created_by?.username || "Unknown";
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 rounded-3xl border border-white/20 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
@@ -161,7 +165,7 @@ export function QuizStats({ quiz, onClose }) {
               <div className="flex items-center justify-between">
                 <span className="text-sm">Created By</span>
                 <span className="font-semibold text-white">
-                  {quiz.created_by?.username || 'Unknown'}
+                  {authorName}
                 </span>
               </div>
             </div>

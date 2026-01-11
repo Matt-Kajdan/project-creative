@@ -35,6 +35,7 @@ export default function ProfilePage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [quizToDelete, setQuizToDelete] = useState(null);
   const [sortBy, setSortBy] = useState("newest");
+  const [takenSortBy, setTakenSortBy] = useState("highest_score");
   const returnTo = location.pathname;
 
   useEffect(() => {
@@ -186,6 +187,9 @@ export default function ProfilePage() {
             return {
               _id: quiz._id,
               title: quiz.title,
+              category: quiz.category,
+              difficulty: quiz.difficulty,
+              req_to_pass: quiz.req_to_pass,
               correct: bestAttempt.correct,
               attempted_at: bestAttempt.attempted_at,
               totalQuestions: quiz.questions.length,
@@ -513,17 +517,17 @@ export default function ProfilePage() {
   const difficultyChips = {
     easy: {
       label: "Easy",
-      className: "border-emerald-200/80 bg-emerald-100/70 text-emerald-700",
+      className: "border-emerald-300/50 bg-emerald-400/25 text-emerald-700 hover:border-emerald-200/80 hover:bg-emerald-100/70 hover:text-emerald-700",
       icon: "/easy.svg"
     },
     medium: {
       label: "Medium",
-      className: "border-amber-200/80 bg-amber-100/70 text-amber-700",
+      className: "border-amber-400/40 bg-amber-500/20 text-amber-700 hover:border-amber-200/80 hover:bg-amber-100/70 hover:text-amber-700",
       icon: "/medium.svg"
     },
     hard: {
       label: "Hard",
-      className: "border-rose-200/80 bg-rose-100/70 text-rose-700",
+      className: "border-rose-400/40 bg-rose-500/20 text-rose-700 hover:border-rose-200/80 hover:bg-rose-100/70 hover:text-rose-700",
       icon: "/hard.svg"
     }
   };
@@ -531,12 +535,6 @@ export default function ProfilePage() {
   const totalQuestions = takenQuizzes.reduce((sum, quiz) => sum + quiz.totalQuestions, 0);
   const totalCorrect = takenQuizzes.reduce((sum, quiz) => sum + quiz.correct, 0);
   const averageScore = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
-  const stats = [
-    { label: "Quizzes Taken", value: takenQuizzes.length },
-    { label: "Avg Score", value: `${averageScore}%` },
-    { label: "Created", value: createdQuizzes.length },
-    ...(isOwnProfile ? [{ label: "Favourites", value: myFavourites.length }] : []),
-  ];
 
   return (
     <>
@@ -561,7 +559,7 @@ export default function ProfilePage() {
         <main className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 min-h-full">
           <div className="mb-6 sm:mb-8">
             <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 relative overflow-hidden shadow-sm">
-              <div className="flex flex-col sm:flex-row items-start gap-6">
+              <div className="flex flex-col sm:flex-row items-center gap-6">
                 <div className="relative">
                   <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-[30%] overflow-hidden border-2 border-slate-200/80 bg-amber-200/70 flex items-center justify-center">
                     {profile.user_data?.profile_pic ? (
@@ -756,7 +754,7 @@ export default function ProfilePage() {
                           if (isAccountLocked) return;
                           navigate(`/quiz/${quiz._id}`, { state: { returnTo } });
                         }}
-                        className={`group relative bg-white/80 backdrop-blur rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transform transition-all duration-150 ${isAccountLocked
+                        className={`group relative bg-white/80 backdrop-blur rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transform transition-all duration-300 ease-out ${isAccountLocked
                           ? "cursor-not-allowed opacity-60"
                           : "hover:border-slate-300 hover:bg-white hover:shadow-[0_0_20px_0_rgba(203,213,225,0.6)] hover:scale-[1.01] cursor-pointer"
                           }`}
@@ -774,14 +772,14 @@ export default function ProfilePage() {
                         </div>
                         <div className="px-6 pt-4 pb-3">
                           <div className="flex items-center justify-between mb-4">
-                            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white/70 px-3 py-1.5 text-xs font-semibold text-slate-700">
+                            <span className={`inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white/70 px-3 py-1.5 text-xs font-bold text-slate-700 transition-all duration-200 ease-in-out ${difficultyChips[quiz.difficulty || "medium"].className}`}>
                               <span
                                 aria-hidden="true"
-                                className="h-4 w-4 text-slate-700"
+                                className="h-4 w-4"
                                 style={{
                                   backgroundColor: "currentColor",
-                                  maskImage: `url(/${quiz.difficulty || "medium"}.svg)`,
-                                  WebkitMaskImage: `url(/${quiz.difficulty || "medium"}.svg)`,
+                                  maskImage: `url(${difficultyChips[quiz.difficulty || "medium"].icon})`,
+                                  WebkitMaskImage: `url(${difficultyChips[quiz.difficulty || "medium"].icon})`,
                                   maskRepeat: "no-repeat",
                                   WebkitMaskRepeat: "no-repeat",
                                   maskPosition: "center",
@@ -994,6 +992,8 @@ export default function ProfilePage() {
                     const quizCategory = typeof quiz === "string" ? null : quiz.category;
                     const creatorName = typeof quiz === "string" ? null : quiz.created_by?.user_data?.username;
                     const creatorAuthId = typeof quiz === "string" ? null : quiz.created_by?.authId;
+                    const creatorId = typeof quiz === "string" ? null : quiz.created_by?._id;
+                    const isMyOwnQuiz = creatorId && myUserId && creatorId.toString() === myUserId.toString();
                     const creatorIsDeleted = creatorAuthId === "deleted-user"
                       || creatorName === "__deleted__"
                       || creatorName === "Deleted user";
@@ -1034,7 +1034,7 @@ export default function ProfilePage() {
                               </svg>
                               <span className="capitalize">{quizCategory || "other"}</span>
                             </div>
-                            <div className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold ${difficulty.className}`}>
+                            <div className={`inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white/70 px-3 py-1.5 text-xs font-bold text-slate-700 transition-all duration-200 ease-in-out ${difficulty.className}`}>
                               <span
                                 aria-hidden="true"
                                 className="h-4 w-4"
@@ -1053,9 +1053,9 @@ export default function ProfilePage() {
                               <span>{difficulty.label}</span>
                             </div>
                             {creatorName && (
-                              creatorIsDeleted || isAccountLocked ? (
-                                <span className="rounded-full px-3 py-1.5 text-xs font-semibold text-slate-600 bg-white/70 border border-slate-200/80">
-                                  Created by {creatorIsDeleted ? "deleted user" : creatorName}
+                              creatorIsDeleted || isAccountLocked || isMyOwnQuiz ? (
+                                <span className="rounded-full px-3 py-1.5 text-xs font-bold text-slate-600 border border-slate-200/80 bg-white/70">
+                                  {isMyOwnQuiz ? 'Created by you' : `Created by ${creatorIsDeleted ? "deleted user" : creatorName}`}
                                 </span>
                               ) : (
                                 <button
@@ -1098,7 +1098,7 @@ export default function ProfilePage() {
                       </>
                     );
 
-                    const cardClass = `group relative block bg-white/80 backdrop-blur rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm transition-all duration-150 ${isAccountLocked ? "opacity-60 cursor-not-allowed" : "hover:border-slate-300 hover:bg-white hover:shadow-[0_0_20px_0_rgba(203,213,225,0.6)] hover:scale-[1.01]"
+                    const cardClass = `group relative block bg-white/80 backdrop-blur rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm transition-all duration-300 ease-out ${isAccountLocked ? "opacity-60 cursor-not-allowed" : "hover:border-slate-300 hover:bg-white hover:shadow-[0_0_20px_0_rgba(203,213,225,0.6)] hover:scale-[1.01]"
                       }`;
 
                     return isAccountLocked ? (
@@ -1120,9 +1120,89 @@ export default function ProfilePage() {
               )}
             </div>
           )}
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="w-full">
             <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mb-6 sm:mb-8 shadow-sm">
-              <h2 className="text-2xl sm:text-3xl font-semibold text-slate-800 mb-6">Quizzes Taken</h2>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-slate-800">Quizzes Taken</h2>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-2xl border border-slate-200/80 h-[38px]">
+                    {['highest_score', 'category', 'difficulty', 'questions'].map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => setTakenSortBy(option)}
+                        className={`w-20 py-1.5 rounded-xl text-xs font-semibold capitalize transition-all outline-none focus:outline-none focus:ring-0 active:scale-95 select-none ${takenSortBy === option
+                          ? 'bg-white text-slate-800 shadow-sm border border-slate-200/50'
+                          : 'text-slate-500 hover:text-slate-700'
+                          }`}
+                        style={{ WebkitTapHighlightColor: 'transparent' }}
+                      >
+                        {option === 'highest_score' ? 'Score' : option === 'questions' ? 'Questions' : option}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="px-4 py-2.5 bg-slate-100/80 rounded-2xl border border-slate-200/80 flex items-center h-[38px]">
+                    <span className="text-slate-700 font-semibold text-xs whitespace-nowrap leading-none">
+                      {takenQuizzes.length} Quiz{takenQuizzes.length !== 1 ? 'zes' : ''}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {takenQuizzes.length > 0 && (
+                <div className="grid grid-cols-4 gap-4 mb-8">
+                  <div className="bg-white/50 rounded-2xl p-4 border border-slate-200/60 text-center">
+                    <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Favorite Topic</div>
+                    <div className="text-lg font-bold text-slate-800 capitalize">
+                      <span className={(() => {
+                        if (takenQuizzes.length === 0) return "text-slate-800";
+                        const counts = {};
+                        takenQuizzes.forEach(q => {
+                          const cat = q.category || 'other';
+                          counts[cat] = (counts[cat] || 0) + 1;
+                        });
+                        const favoriteCat = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+                        const categoryColors = {
+                          art: "text-pink-600",
+                          history: "text-amber-600", 
+                          music: "text-purple-600",
+                          science: "text-blue-600",
+                          other: "text-slate-600"
+                        };
+                        return categoryColors[favoriteCat] || categoryColors.other;
+                      })()}>
+                        {(() => {
+                          if (takenQuizzes.length === 0) return "--";
+                          const counts = {};
+                          takenQuizzes.forEach(q => {
+                            const cat = q.category || 'other';
+                            counts[cat] = (counts[cat] || 0) + 1;
+                          });
+                          return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+                        })()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="bg-white/50 rounded-2xl p-4 border border-slate-200/60 text-center">
+                    <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Average Score</div>
+                    <div className="text-lg font-bold text-slate-800">
+                      {Math.round(takenQuizzes.reduce((acc, q) => acc + (q.correct / q.totalQuestions) * 100, 0) / takenQuizzes.length)}%
+                    </div>
+                  </div>
+                  <div className="bg-white/50 rounded-2xl p-4 border border-slate-200/60 text-center">
+                    <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Quizzes Mastered</div>
+                    <div className="text-lg font-bold text-amber-600">
+                      {takenQuizzes.filter(q => q.correct === q.totalQuestions).length}
+                    </div>
+                  </div>
+                  <div className="bg-white/50 rounded-2xl p-4 border border-slate-200/60 text-center">
+                    <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Correct Answers</div>
+                    <div className="text-lg font-bold text-slate-800">
+                      {takenQuizzes.reduce((sum, q) => sum + q.correct, 0)}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {takenQuizzes.length === 0 ? (
                 <div className="text-center py-12">
                   <div className="w-20 h-20 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
@@ -1146,57 +1226,105 @@ export default function ProfilePage() {
                   )}
                 </div>
               ) : (
-                <div className="space-y-4">
-                  {takenQuizzes.map((quiz) => {
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {[...takenQuizzes].sort((a, b) => {
+                    if (takenSortBy === "highest_score") {
+                      const aPercentage = (a.correct / a.totalQuestions) * 100;
+                      const bPercentage = (b.correct / b.totalQuestions) * 100;
+                      return bPercentage - aPercentage;
+                    }
+                    if (takenSortBy === "category") {
+                      return (a.category || 'other').localeCompare(b.category || 'other');
+                    }
+                    if (takenSortBy === "difficulty") {
+                      const difficultyOrder = { easy: 1, medium: 2, hard: 3 };
+                      const aDifficulty = difficultyOrder[a.difficulty] || 2;
+                      const bDifficulty = difficultyOrder[b.difficulty] || 2;
+                      return aDifficulty - bDifficulty;
+                    }
+                    if (takenSortBy === "questions") {
+                      return b.totalQuestions - a.totalQuestions;
+                    }
+                    return 0;
+                  }).map((quiz) => {
                     const percentage = Math.round((quiz.correct / quiz.totalQuestions) * 100);
-                    const gradientClass = percentage >= 80 ? "from-green-500 to-emerald-600" :
-                      percentage >= 60 ? "from-blue-500 to-cyan-600" :
-                        percentage >= 40 ? "from-amber-500 to-orange-600" :
-                          "from-red-500 to-pink-600";
+                    const isMastered = percentage === 100;
+                    const gradientClass = "from-slate-800 to-green-600";
 
-                    const takenClass = `group block bg-white/80 backdrop-blur rounded-2xl p-5 border border-slate-200/80 shadow-sm transition-all duration-150 ${isAccountLocked ? "opacity-60 cursor-not-allowed" : "hover:border-slate-300 hover:bg-white hover:shadow-[0_0_20px_0_rgba(203,213,225,0.6)] hover:scale-[1.01]"
+                    const takenClass = `group block bg-white/80 backdrop-blur rounded-2xl p-5 border shadow-sm transition-all duration-200 ease-out ${isAccountLocked ? "opacity-60 cursor-not-allowed" : `hover:border-slate-300 hover:bg-white hover:shadow-[0_0_20px_0_rgba(203,213,225,0.6)] hover:scale-[1.005] ${isMastered ? 'border-amber-300/60 hover:border-amber-400/80' : 'border-slate-200/80'}`
                       }`;
+
+                    const quizCategory = quiz.category || "other";
+                    const difficultyKey = difficultyChips[quiz.difficulty] ? quiz.difficulty : "medium";
+                    const difficulty = difficultyChips[difficultyKey];
+
                     const takenContent = (
-                      <>
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                          <div className="flex-1">
-                            <h3 className="text-lg font-semibold text-slate-800 mb-2">{quiz.title}</h3>
-                            <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600">
-                              <div className="flex items-center gap-1">
-                                <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <span>
-                                  {new Date(quiz.attempted_at).toLocaleDateString("en-GB", {
-                                    day: "numeric",
-                                    month: "short",
-                                    year: "numeric"
-                                  })}
-                                </span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                                <span>{quiz.correct}/{quiz.totalQuestions} correct</span>
-                              </div>
+                      <div className="flex flex-col gap-4">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <h3 className="text-lg font-bold text-slate-800 mb-1 line-clamp-1">{quiz.title}</h3>
+                            <div className="text-xs font-medium text-slate-500 text-left">
+                              Took on {new Date(quiz.attempted_at).toLocaleDateString("en-GB", {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric"
+                              })}
                             </div>
                           </div>
-                          <div className="flex items-center gap-4">
-                            <div className="text-center">
-                              <div className={`text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r ${gradientClass}`}>
-                                {percentage}%
-                              </div>
+                          {isMastered && (
+                            <div className="flex-shrink-0 inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-700 border border-amber-200">
+                              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"/>
+                                <path d="M5 16h14l-1 7H6l-1-7z"/>
+                              </svg>
+                              <span>Mastered</span>
                             </div>
+                          )}
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2">
+                          <div className={`inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r ${categoryColors[quizCategory] || categoryColors.other} px-3 py-1.5 text-xs font-bold text-white shadow-sm`}>
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                              {categoryIcons[quizCategory] || categoryIcons.other}
+                            </svg>
+                            <span className="capitalize">{quizCategory}</span>
+                          </div>
+
+                          <div className={`inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white/70 px-3 py-1.5 text-xs font-bold text-slate-700 transition-all duration-200 ease-in-out ${difficulty.className}`}>
+                            <span
+                              aria-hidden="true"
+                              className="h-3.5 w-3.5"
+                              style={{
+                                backgroundColor: "currentColor",
+                                maskImage: `url(${difficulty.icon})`,
+                                WebkitMaskImage: `url(${difficulty.icon})`,
+                                maskRepeat: "no-repeat",
+                                WebkitMaskRepeat: "no-repeat",
+                                maskPosition: "center",
+                                WebkitMaskPosition: "center",
+                                maskSize: "contain",
+                                WebkitMaskSize: "contain"
+                              }}
+                            ></span>
+                            <span>{difficulty.label}</span>
                           </div>
                         </div>
-                        <div className="mt-4 h-2 bg-slate-200/80 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full bg-gradient-to-r ${gradientClass} transition-all duration-500`}
-                            style={{ width: `${percentage}%` }}
-                          ></div>
+
+                        <div className="space-y-2">
+                          <div className="flex items-end justify-between text-xs">
+                            <span className="font-semibold text-slate-600">Score</span>
+                            <span className="font-bold text-slate-800">
+                              {quiz.correct}/{quiz.totalQuestions} <span className="text-slate-400 font-medium ml-1">({percentage}%)</span>
+                            </span>
+                          </div>
+                          <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden border border-slate-100">
+                            <div
+                              className={`h-full bg-gradient-to-r ${gradientClass} transition-all duration-500 ease-out`}
+                              style={{ width: `${percentage}%` }}
+                            ></div>
+                          </div>
                         </div>
-                      </>
+                      </div>
                     );
 
                     return isAccountLocked ? (

@@ -444,7 +444,7 @@ export default function SettingsPage() {
             </form>
           </div>
           {!isAccountLocked && (
-            <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mt-6 shadow-sm">
+            <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mt-6 shadow-sm min-h-[240px] flex flex-col justify-center">
               <h2 className="text-2xl font-semibold text-slate-800 mb-4">{deletionHeader}</h2>
               {deletionStep === "intro" && (
                 <>

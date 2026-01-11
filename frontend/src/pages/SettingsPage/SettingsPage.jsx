@@ -72,12 +72,26 @@ export default function SettingsPage() {
 
   if (!loggedInUser) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700">
-        <div className="relative flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-          <p className="mt-4 text-white font-medium">Please log in...</p>
+      <>
+        <div
+          className="fixed inset-0"
+          style={{
+            backgroundColor: "#f7f5f1",
+            backgroundImage: `
+              radial-gradient(1200px 800px at 5% 0%, rgba(255, 227, 170, 0.28), transparent 60%),
+              radial-gradient(900px 700px at 85% 10%, rgba(255, 190, 220, 0.24), transparent 55%),
+              radial-gradient(1000px 800px at 15% 90%, rgba(180, 220, 255, 0.24), transparent 60%),
+              radial-gradient(900px 800px at 85% 85%, rgba(190, 235, 210, 0.24), transparent 60%)
+            `
+          }}
+        ></div>
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="relative flex flex-col items-center">
+            <div className="w-16 h-16 border-4 border-slate-200 border-t-slate-500 rounded-full animate-spin"></div>
+            <p className="mt-4 text-slate-600 font-medium">Please log in...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -222,89 +236,117 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700">
-        <div className="relative flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-          <p className="mt-4 text-white font-medium">Loading settings...</p>
+      <>
+        <div
+          className="fixed inset-0"
+          style={{
+            backgroundColor: "#f7f5f1",
+            backgroundImage: `
+              radial-gradient(1200px 800px at 5% 0%, rgba(255, 227, 170, 0.28), transparent 60%),
+              radial-gradient(900px 700px at 85% 10%, rgba(255, 190, 220, 0.24), transparent 55%),
+              radial-gradient(1000px 800px at 15% 90%, rgba(180, 220, 255, 0.24), transparent 60%),
+              radial-gradient(900px 800px at 85% 85%, rgba(190, 235, 210, 0.24), transparent 60%)
+            `
+          }}
+        ></div>
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="relative flex flex-col items-center">
+            <div className="w-16 h-16 border-4 border-slate-200 border-t-slate-500 rounded-full animate-spin"></div>
+            <p className="mt-4 text-slate-600 font-medium">Loading settings...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pt-16 sm:pt-20">
+    <>
+      <div
+        className="fixed inset-0"
+        style={{
+          backgroundColor: "#f7f5f1",
+          backgroundImage: `
+            radial-gradient(1200px 800px at 5% 0%, rgba(255, 227, 170, 0.28), transparent 60%),
+            radial-gradient(900px 700px at 85% 10%, rgba(255, 190, 220, 0.24), transparent 55%),
+            radial-gradient(1000px 800px at 15% 90%, rgba(180, 220, 255, 0.24), transparent 60%),
+            radial-gradient(900px 800px at 85% 85%, rgba(190, 235, 210, 0.24), transparent 60%)
+          `
+        }}
+      ></div>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/4 left-1/4 w-[28rem] h-[28rem] bg-amber-200/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[28rem] h-[28rem] bg-rose-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
+        <div className="absolute top-1/2 left-1/2 w-[30rem] h-[30rem] -translate-x-1/2 -translate-y-1/2 bg-sky-200/25 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
-      <main className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 mb-8">
-          Settings
-        </h1>
+      <div className="relative min-h-screen pt-16 sm:pt-20">
+        <main className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <h1 className="text-4xl font-semibold text-slate-800 mb-8">
+            Settings
+          </h1>
         {message && (
-          <div className="mb-6 bg-green-500/20 border border-green-500/50 rounded-2xl p-4 backdrop-blur">
-            <p className="text-green-300">{message}</p>
+          <div className="mb-6 bg-emerald-100/70 border border-emerald-200/80 rounded-2xl p-4 backdrop-blur">
+            <p className="text-emerald-700">{message}</p>
           </div>
         )}
         {error && (
-          <div className="mb-6 bg-red-500/20 border border-red-500/50 rounded-2xl p-4 backdrop-blur">
-            <p className="text-red-300">{error}</p>
+          <div className="mb-6 bg-rose-100/80 border border-rose-200/80 rounded-2xl p-4 backdrop-blur">
+            <p className="text-rose-700">{error}</p>
           </div>
         )}
         {isAccountLocked && (
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20 mb-6">
-            <h2 className="text-2xl font-bold text-white mb-4">{deletionHeader}</h2>
+          <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mb-6 shadow-sm">
+            <h2 className="text-2xl font-semibold text-slate-800 mb-4">{deletionHeader}</h2>
             {deletionError && (
-              <div className="mb-4 bg-red-500/20 border border-red-500/50 rounded-2xl p-4 backdrop-blur">
-                <p className="text-red-300">{deletionError}</p>
+              <div className="mb-4 bg-rose-100/80 border border-rose-200/80 rounded-2xl p-4 backdrop-blur">
+                <p className="text-rose-700">{deletionError}</p>
               </div>
             )}
-            <p className="text-gray-300 mb-4">
+            <p className="text-slate-600 mb-4">
               Your account is scheduled for deletion. Manage the countdown from your profile.
             </p>
             <div className="flex justify-center">
               <button
                 type="button"
                 onClick={() => navigate(`/users/${profile?.username}`)}
-                className="px-6 py-3 rounded-full bg-white/10 text-white font-semibold border border-white/20 hover:bg-white/20 transition-all"
+                className="px-6 py-3 rounded-xl bg-white/70 text-slate-700 font-semibold border border-slate-200/80 hover:bg-white transition-colors"
               >
                 Go to My Profile
               </button>
             </div>
           </div>
         )}
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20 mb-6">
-          <h2 className="text-2xl font-bold text-white mb-6">Profile Information</h2>
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mb-6 shadow-sm">
+          <h2 className="text-2xl font-semibold text-slate-800 mb-6">Profile Information</h2>
           <form onSubmit={handleUpdateProfile} className="space-y-4">
             <div>
-              <label className="block text-gray-300 mb-2">Username</label>
+              <label className="block text-slate-600 mb-2">Username</label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={isAccountLocked}
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-white/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/70 disabled:opacity-50 disabled:cursor-not-allowed"
                 required
               />
             </div>
             <div>
-              <label className="block text-gray-300 mb-2">Profile Picture URL</label>
+              <label className="block text-slate-600 mb-2">Profile Picture URL</label>
               <input
                 type="url"
                 value={profilePic}
                 onChange={(e) => setProfilePic(e.target.value)}
                 placeholder="https://example.com/image.jpg"
                 disabled={isAccountLocked}
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-white/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/70 disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
             {profilePic && (
               <div className="flex items-center gap-4">
-                <p className="text-gray-300">Preview:</p>
+                <p className="text-slate-600">Preview:</p>
                 <img
                   src={profilePic}
                   alt="Profile preview"
-                  className="w-16 h-16 rounded-full object-cover border-2 border-white/20"
+                  className="w-16 h-16 rounded-full object-cover border-2 border-slate-200/80"
                   onError={(e) => e.target.style.display = 'none'}
                 />
               </div>
@@ -312,108 +354,108 @@ export default function SettingsPage() {
             <button
               type="submit"
               disabled={saving || isAccountLocked}
-              className="px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 rounded-xl bg-slate-800 text-white font-semibold hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? "Saving..." : "Save Profile"}
             </button>
           </form>
         </div>
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20 mb-6">
-          <h2 className="text-2xl font-bold text-white mb-6">Email Address</h2>
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mb-6 shadow-sm">
+          <h2 className="text-2xl font-semibold text-slate-800 mb-6">Email Address</h2>
           <form onSubmit={handleUpdateEmail} className="space-y-4">
             <div>
-              <label className="block text-gray-300 mb-2">New Email</label>
+              <label className="block text-slate-600 mb-2">New Email</label>
               <input
                 type="email"
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
                 disabled={isAccountLocked}
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-white/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/70 disabled:opacity-50 disabled:cursor-not-allowed"
                 required
               />
             </div>
             <div>
-              <label className="block text-gray-300 mb-2">Current Password (required for security)</label>
+              <label className="block text-slate-600 mb-2">Current Password (required for security)</label>
               <input
                 type="password"
                 value={currentEmailPassword}
                 onChange={(e) => setCurrentEmailPassword(e.target.value)}
                 placeholder="Enter current password"
                 disabled={isAccountLocked}
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-white/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/70 disabled:opacity-50 disabled:cursor-not-allowed"
                 required
               />
             </div>
             <button
               type="submit"
               disabled={saving || isAccountLocked || newEmail === loggedInUser?.email || !currentEmailPassword}
-              className="px-6 py-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold hover:shadow-lg hover:shadow-blue-500/50 transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 rounded-xl bg-slate-800 text-white font-semibold hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? "Updating..." : "Update Email"}
             </button>
           </form>
         </div>
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20">
-          <h2 className="text-2xl font-bold text-white mb-6">Change Password</h2>
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+          <h2 className="text-2xl font-semibold text-slate-800 mb-6">Change Password</h2>
           <form onSubmit={handleUpdatePassword} className="space-y-4">
             <div>
-              <label className="block text-gray-300 mb-2">Current Password</label>
+              <label className="block text-slate-600 mb-2">Current Password</label>
               <input
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 placeholder="Enter current password"
                 disabled={isAccountLocked}
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-white/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/70 disabled:opacity-50 disabled:cursor-not-allowed"
                 required
               />
             </div>
             <div>
-              <label className="block text-gray-300 mb-2">New Password</label>
+              <label className="block text-slate-600 mb-2">New Password</label>
               <input
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Enter new password"
                 disabled={isAccountLocked}
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-white/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/70 disabled:opacity-50 disabled:cursor-not-allowed"
                 minLength={6}
               />
             </div>
             <div>
-              <label className="block text-gray-300 mb-2">Confirm Password</label>
+              <label className="block text-slate-600 mb-2">Confirm Password</label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm new password"
                 disabled={isAccountLocked}
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 bg-white/70 border border-slate-200/80 rounded-xl text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/70 disabled:opacity-50 disabled:cursor-not-allowed"
                 minLength={6}
               />
             </div>
             <button
               type="submit"
               disabled={saving || isAccountLocked || !currentPassword || !newPassword || !confirmPassword}
-              className="px-6 py-3 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold hover:shadow-lg hover:shadow-emerald-500/50 transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 rounded-xl bg-slate-800 text-white font-semibold hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? "Updating..." : "Change Password"}
             </button>
           </form>
         </div>
         {!isAccountLocked && (
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20 mt-6">
-            <h2 className="text-2xl font-bold text-white mb-4">{deletionHeader}</h2>
+          <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mt-6 shadow-sm">
+            <h2 className="text-2xl font-semibold text-slate-800 mb-4">{deletionHeader}</h2>
             {deletionStep === "intro" && (
               <>
-                <p className="text-gray-300 mb-4">
+                <p className="text-slate-600 mb-4">
                   You will then have 7 days to cancel if you change your mind, or delete immediately.
                 </p>
                 <div className="flex justify-center">
                   <button
                     type="button"
                     onClick={() => setDeletionStep("choose")}
-                    className="px-6 py-3 rounded-full bg-gradient-to-r from-rose-500 to-red-500 text-white font-semibold hover:shadow-lg hover:shadow-rose-500/40 transition-all transform hover:scale-105 active:scale-95"
+                    className="px-6 py-3 rounded-xl bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-colors"
                   >
                     Delete Account
                   </button>
@@ -421,13 +463,13 @@ export default function SettingsPage() {
               </>
             )}
             {deletionError && (
-              <div className="mb-4 bg-red-500/20 border border-red-500/50 rounded-2xl p-4 backdrop-blur">
-                <p className="text-red-300">{deletionError}</p>
+              <div className="mb-4 bg-rose-100/80 border border-rose-200/80 rounded-2xl p-4 backdrop-blur">
+                <p className="text-rose-700">{deletionError}</p>
               </div>
             )}
             {deletionStep === "choose" && (
               <div className="space-y-4">
-                <p className="text-gray-300">
+                <p className="text-slate-600">
                   You can delete all quizzes you created (this removes other users&apos; attempt history
                   on those quizzes), or preserve your quizzes and anonymise your authorship as
                   deleted user.
@@ -435,9 +477,17 @@ export default function SettingsPage() {
                 <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
                   <button
                     type="button"
+                    onClick={() => setDeletionStep("intro")}
+                    disabled={deletionSaving}
+                    className="px-6 py-3 rounded-xl bg-white/70 text-slate-700 font-semibold border border-slate-200/80 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => handleChooseDeletion("delete_quizzes")}
                     disabled={deletionSaving}
-                    className="px-6 py-3 rounded-full bg-white/10 text-white font-semibold border border-white/20 hover:bg-white/20 transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-3 rounded-xl bg-white/70 text-slate-700 font-semibold border border-slate-200/80 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Delete My Quizzes
                   </button>
@@ -445,7 +495,7 @@ export default function SettingsPage() {
                     type="button"
                     onClick={() => handleChooseDeletion("preserve_quizzes")}
                     disabled={deletionSaving}
-                    className="px-6 py-3 rounded-full bg-white/10 text-white font-semibold border border-white/20 hover:bg-white/20 transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-3 rounded-xl bg-white/70 text-slate-700 font-semibold border border-slate-200/80 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Preserve My Quizzes
                   </button>
@@ -454,7 +504,8 @@ export default function SettingsPage() {
             )}
           </div>
         )}
-      </main>
-    </div>
+        </main>
+      </div>
+    </>
   );
 }

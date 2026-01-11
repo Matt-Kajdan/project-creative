@@ -354,44 +354,86 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-        <div className="relative flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-          <p className="mt-4 text-white font-medium">Loading profile...</p>
+      <>
+        <div
+          className="fixed inset-0"
+          style={{
+            backgroundColor: "#f7f5f1",
+            backgroundImage: `
+              radial-gradient(1200px 800px at 5% 0%, rgba(255, 227, 170, 0.28), transparent 60%),
+              radial-gradient(900px 700px at 85% 10%, rgba(255, 190, 220, 0.24), transparent 55%),
+              radial-gradient(1000px 800px at 15% 90%, rgba(180, 220, 255, 0.24), transparent 60%),
+              radial-gradient(900px 800px at 85% 85%, rgba(190, 235, 210, 0.24), transparent 60%)
+            `
+          }}
+        ></div>
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="relative flex flex-col items-center">
+            <div className="w-16 h-16 border-4 border-slate-200 border-t-slate-500 rounded-full animate-spin"></div>
+            <p className="mt-4 text-slate-600 font-medium">Loading profile...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (error) {
     return (
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 max-w-md text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-            <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <>
+        <div
+          className="fixed inset-0"
+          style={{
+            backgroundColor: "#f7f5f1",
+            backgroundImage: `
+              radial-gradient(1200px 800px at 5% 0%, rgba(255, 227, 170, 0.28), transparent 60%),
+              radial-gradient(900px 700px at 85% 10%, rgba(255, 190, 220, 0.24), transparent 55%),
+              radial-gradient(1000px 800px at 15% 90%, rgba(180, 220, 255, 0.24), transparent 60%),
+              radial-gradient(900px 800px at 85% 85%, rgba(190, 235, 210, 0.24), transparent 60%)
+            `
+          }}
+        ></div>
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border border-slate-200/80 max-w-md text-center shadow-sm">
+            <div className="w-16 h-16 bg-rose-500/15 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <svg className="w-8 h-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold text-white mb-3">Error</h3>
-          <p className="text-gray-300">{error}</p>
+            <h3 className="text-2xl font-semibold text-slate-800 mb-3">Error</h3>
+            <p className="text-slate-600">{error}</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (!profile) {
     return (
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 max-w-md text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-gray-500 to-slate-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-            <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <>
+        <div
+          className="fixed inset-0"
+          style={{
+            backgroundColor: "#f7f5f1",
+            backgroundImage: `
+              radial-gradient(1200px 800px at 5% 0%, rgba(255, 227, 170, 0.28), transparent 60%),
+              radial-gradient(900px 700px at 85% 10%, rgba(255, 190, 220, 0.24), transparent 55%),
+              radial-gradient(1000px 800px at 15% 90%, rgba(180, 220, 255, 0.24), transparent 60%),
+              radial-gradient(900px 800px at 85% 85%, rgba(190, 235, 210, 0.24), transparent 60%)
+            `
+          }}
+        ></div>
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border border-slate-200/80 max-w-md text-center shadow-sm">
+            <div className="w-16 h-16 bg-slate-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <svg className="w-8 h-8 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-bold text-white mb-3">User Not Found</h3>
-          <p className="text-gray-300">The user you&apos;re looking for doesn&apos;t exist.</p>
+            <h3 className="text-2xl font-semibold text-slate-800 mb-3">User Not Found</h3>
+            <p className="text-slate-600">The user you&apos;re looking for doesn&apos;t exist.</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -423,17 +465,17 @@ export default function ProfilePage() {
   const difficultyChips = {
     easy: {
       label: "Easy",
-      className: "border-emerald-400/40 bg-emerald-500/20 text-emerald-100",
+      className: "border-emerald-200/80 bg-emerald-100/70 text-emerald-700",
       icon: "/easy.svg"
     },
     medium: {
       label: "Medium",
-      className: "border-amber-400/40 bg-amber-500/20 text-amber-100",
+      className: "border-amber-200/80 bg-amber-100/70 text-amber-700",
       icon: "/medium.svg"
     },
     hard: {
       label: "Hard",
-      className: "border-rose-400/40 bg-rose-500/20 text-rose-100",
+      className: "border-rose-200/80 bg-rose-100/70 text-rose-700",
       icon: "/hard.svg"
     }
   };
@@ -443,28 +485,42 @@ export default function ProfilePage() {
   const averageScore = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 pt-16 sm:pt-20">
+    <>
+      <div
+        className="fixed inset-0"
+        style={{
+          backgroundColor: "#f7f5f1",
+          backgroundImage: `
+            radial-gradient(1200px 800px at 5% 0%, rgba(255, 227, 170, 0.28), transparent 60%),
+            radial-gradient(900px 700px at 85% 10%, rgba(255, 190, 220, 0.24), transparent 55%),
+            radial-gradient(1000px 800px at 15% 90%, rgba(180, 220, 255, 0.24), transparent 60%),
+            radial-gradient(900px 800px at 85% 85%, rgba(190, 235, 210, 0.24), transparent 60%)
+          `
+        }}
+      ></div>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/4 left-1/4 w-[28rem] h-[28rem] bg-amber-200/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[28rem] h-[28rem] bg-rose-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
+        <div className="absolute top-1/2 left-1/2 w-[30rem] h-[30rem] -translate-x-1/2 -translate-y-1/2 bg-sky-200/25 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
-      <main className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 min-h-full">
+      <div className="relative min-h-screen pt-16 sm:pt-20">
+        <main className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 min-h-full">
         <div className="mb-6 sm:mb-8">
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20 relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500"></div>
+          <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 relative overflow-hidden shadow-sm">
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-200 via-rose-200 to-sky-200"></div>
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
               <div className="relative">
-                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-white/20 bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-slate-200/80 bg-amber-200/70 flex items-center justify-center">
                   {profile.profile_pic ? (
                     <img src={profile.profile_pic} alt={profile.username} className="w-full h-full object-cover" />
                   ) : (
-                    <span className="text-white text-4xl sm:text-5xl font-bold">
+                    <span className="text-slate-700 text-4xl sm:text-5xl font-semibold">
                       {profile.username.charAt(0).toUpperCase()}
                     </span>
                   )}
                 </div>
                 {isOwnProfile && (
-                  <div className="absolute -bottom-2 -right-2 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full p-2">
+                  <div className="absolute -bottom-2 -right-2 bg-emerald-500 rounded-full p-2">
                     <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
@@ -472,15 +528,15 @@ export default function ProfilePage() {
                 )}
               </div>
               <div className="flex-1 text-center sm:text-left">
-                <h1 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 mb-2">
+                <h1 className="text-3xl sm:text-4xl font-semibold text-slate-800 mb-2">
                   {profile.username}
                 </h1>
                 {isOwnProfile && loggedInUser && (
-                  <p className="text-gray-300 mb-4">{loggedInUser.email}</p>
+                  <p className="text-slate-500 mb-4">{loggedInUser.email}</p>
                 )}
                 {profile.created_at && (
-                  <div className="flex items-center justify-center sm:justify-start gap-2 text-gray-400 text-sm mb-4">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="flex items-center justify-center sm:justify-start gap-2 text-slate-500 text-sm mb-4">
+                    <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     <span>
@@ -497,13 +553,13 @@ export default function ProfilePage() {
                     {isOwnProfile && (
                       <>
                         {isAccountLocked ? (
-                          <span className="px-6 py-2.5 rounded-full bg-white/10 text-white/70 font-semibold border border-white/20">
+                          <span className="px-6 py-2.5 rounded-xl bg-slate-100 text-slate-500 font-semibold border border-slate-200/80">
                             Settings Locked
                           </span>
                         ) : (
                           <a
                             href={`/settings`}
-                            className="px-6 py-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2"
+                            className="px-6 py-2.5 rounded-xl bg-slate-800 text-white font-semibold hover:bg-slate-700 transition-colors flex items-center gap-2"
                           >
                             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -512,20 +568,20 @@ export default function ProfilePage() {
                             Settings
                           </a>
                         )}
-                        <span className="px-2 py-2.5 text-white font-semibold">
+                        <span className="px-2 py-2.5 text-slate-700 font-semibold">
                           Your Profile
                         </span>
                       </>
                     )}
                     {!isOwnProfile && friendsLoading && (
-                      <button disabled className="px-6 py-2.5 rounded-full bg-white/10 text-white font-semibold border border-white/20">
+                      <button disabled className="px-6 py-2.5 rounded-xl bg-white/70 text-slate-600 font-semibold border border-slate-200/80">
                         Loading...
                       </button>
                     )}
                     {!isOwnProfile && !friendsLoading && isFriend && (
                       <button
                         onClick={handleRemove}
-                        className="px-6 py-2.5 rounded-full bg-gradient-to-r from-red-500 to-pink-600 text-white font-semibold hover:shadow-lg hover:shadow-red-500/50 transition-all transform hover:scale-105 active:scale-95"
+                        className="px-6 py-2.5 rounded-xl bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-colors"
                       >
                         Remove Friend
                       </button>
@@ -533,7 +589,7 @@ export default function ProfilePage() {
                     {!isOwnProfile && !friendsLoading && !isFriend && pendingSent && (
                       <button
                         onClick={handleRemove}
-                        className="px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold border border-white/20 hover:shadow-lg hover:shadow-amber-500/40 transition-all transform hover:scale-105 active:scale-95"
+                        className="px-6 py-2.5 rounded-xl bg-slate-100 text-slate-600 font-semibold border border-slate-200/80 hover:bg-slate-200/70 transition-colors"
                       >
                         Cancel Request
                       </button>
@@ -542,13 +598,13 @@ export default function ProfilePage() {
                       <>
                         <button
                           onClick={handleAccept}
-                          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold hover:shadow-lg hover:shadow-green-500/50 transition-all transform hover:scale-105 active:scale-95"
+                          className="px-6 py-2.5 rounded-xl bg-emerald-500 text-white font-semibold hover:bg-emerald-600 transition-colors"
                         >
                           Accept Request
                         </button>
                         <button
                           onClick={handleRemove}
-                          className="px-6 py-2.5 rounded-full bg-gradient-to-r from-red-500 to-pink-600 text-white font-semibold hover:shadow-lg hover:shadow-red-500/50 transition-all transform hover:scale-105 active:scale-95"
+                          className="px-6 py-2.5 rounded-xl bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-colors"
                         >
                           Decline
                         </button>
@@ -558,7 +614,7 @@ export default function ProfilePage() {
                       <button
                         onClick={handleSendRequest}
                         disabled={sendingRequest}
-                        className="px-6 py-2.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-6 py-2.5 rounded-xl bg-slate-800 text-white font-semibold hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {sendingRequest ? "Sending..." : "Add Friend"}
                       </button>
@@ -570,17 +626,17 @@ export default function ProfilePage() {
           </div>
         </div>
         {isAccountLocked && (
-          <div className="mb-6 sm:mb-8 bg-amber-500/10 border border-amber-400/40 rounded-3xl p-6 sm:p-8 backdrop-blur-lg">
+          <div className="mb-6 sm:mb-8 bg-amber-100/70 border border-amber-200/80 rounded-3xl p-6 sm:p-8 backdrop-blur-lg shadow-sm">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-amber-100 mb-2">
+                <h2 className="text-xl sm:text-2xl font-semibold text-amber-800 mb-2">
                   Account scheduled for deletion
                 </h2>
-                <p className="text-amber-200 mb-2">
+                <p className="text-amber-700 mb-2">
                   Deletion in {remainingLabel}. {deletionModeLabel}
                 </p>
                 {deletionInfo?.scheduled_for && (
-                  <p className="text-amber-200/80 text-sm">
+                  <p className="text-amber-700/80 text-sm">
                     Scheduled for {new Date(deletionInfo.scheduled_for).toLocaleString("en-GB", {
                       day: "numeric",
                       month: "short",
@@ -591,7 +647,7 @@ export default function ProfilePage() {
                   </p>
                 )}
                 {deletionActionError && (
-                  <p className="text-red-200 mt-3">{deletionActionError}</p>
+                  <p className="text-rose-700 mt-3">{deletionActionError}</p>
                 )}
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
@@ -599,7 +655,7 @@ export default function ProfilePage() {
                   type="button"
                   onClick={handleCancelDeletion}
                   disabled={deletionActionLoading}
-                  className="px-5 py-2.5 rounded-full bg-white/10 text-white font-semibold border border-white/20 hover:bg-white/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-5 py-2.5 rounded-xl bg-white/80 text-slate-700 font-semibold border border-amber-200/80 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {deletionActionLoading ? "Working..." : "Cancel Deletion"}
                 </button>
@@ -607,7 +663,7 @@ export default function ProfilePage() {
                   type="button"
                   onClick={handleDeleteNow}
                   disabled={deletionActionLoading}
-                  className="px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-500 to-red-500 text-white font-semibold hover:shadow-lg hover:shadow-rose-500/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-5 py-2.5 rounded-xl bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Delete Now
                 </button>
@@ -616,31 +672,31 @@ export default function ProfilePage() {
           </div>
         )}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 text-center">
-            <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-2">
+          <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-slate-200/80 text-center shadow-sm">
+            <div className="text-4xl font-semibold text-slate-800 mb-2">
               {takenQuizzes.length}
             </div>
-            <div className="text-gray-300 text-sm">Quizzes Taken</div>
+            <div className="text-slate-600 text-sm">Quizzes Taken</div>
           </div>
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 text-center">
-            <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 mb-2">
+          <div className="bg-white/70 backdrop-blur-lg rounded-2xl p-6 border border-slate-200/80 text-center shadow-sm">
+            <div className="text-4xl font-semibold text-slate-800 mb-2">
               {averageScore}%
             </div>
-            <div className="text-gray-300 text-sm">Average Score</div>
+            <div className="text-slate-600 text-sm">Average Score</div>
           </div>
         </div>
         {isOwnProfile && (
-          <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20 mb-6 sm:mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Favourites</h2>
+          <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mb-6 sm:mb-8 shadow-sm">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-slate-800 mb-6">Favourites</h2>
             {myFavourites.length === 0 ? (
               <div className="text-center py-12">
-                <div className="w-20 h-20 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="w-20 h-20 bg-amber-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <svg className="w-10 h-10 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3l2.7 5.7 6.3.9-4.6 4.5 1.1 6.3L12 17.9 6.5 20.4l1.1-6.3L3 9.6l6.3-.9L12 3Z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">No Favourites Yet</h3>
-                <p className="text-gray-300">Star a quiz to save it here</p>
+                <h3 className="text-xl font-semibold text-slate-800 mb-2">No Favourites Yet</h3>
+                <p className="text-slate-600">Star a quiz to save it here</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -668,7 +724,7 @@ export default function ProfilePage() {
                       <div className="p-5 sm:p-6">
                         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                           <div className="flex min-w-0 flex-1 flex-wrap items-center gap-3">
-                            <h3 className="text-lg sm:text-xl font-semibold text-white truncate">{quizTitle}</h3>
+                            <h3 className="text-lg sm:text-xl font-semibold text-slate-800 truncate">{quizTitle}</h3>
                           </div>
                           <button
                             type="button"
@@ -679,7 +735,7 @@ export default function ProfilePage() {
                               handleRemoveFavourite(quizId);
                             }}
                             disabled={isAccountLocked}
-                            className={`px-3 py-1.5 rounded-full bg-gradient-to-r from-red-500 to-pink-600 text-white text-xs font-semibold transition-all transform active:scale-95 ${isAccountLocked ? "opacity-50 cursor-not-allowed" : "hover:shadow-lg hover:shadow-red-500/50 hover:scale-105"}`}
+                            className={`px-3 py-1.5 rounded-xl bg-rose-500 text-white text-xs font-semibold transition-colors ${isAccountLocked ? "opacity-50 cursor-not-allowed" : "hover:bg-rose-600"}`}
                           >
                             Remove
                           </button>
@@ -697,7 +753,7 @@ export default function ProfilePage() {
                             </div>
                             {creatorName && (
                               creatorIsDeleted || isAccountLocked ? (
-                                <span className="rounded-full px-3 py-1.5 text-xs font-semibold text-white/70 bg-white/10 border border-white/20">
+                                <span className="rounded-full px-3 py-1.5 text-xs font-semibold text-slate-600 bg-white/70 border border-slate-200/80">
                                   Created by {creatorIsDeleted ? "deleted user" : creatorName}
                                 </span>
                               ) : (
@@ -708,41 +764,41 @@ export default function ProfilePage() {
                                     event.stopPropagation();
                                     navigate(`/users/${creatorName}`);
                                   }}
-                                  className="rounded-full px-3 py-1.5 text-xs font-semibold text-white transition-all hover:bg-white/20 hover:text-white bg-white/10 border border-white/20"
+                                  className="rounded-full px-3 py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-white hover:text-slate-800 bg-white/70 border border-slate-200/80"
                                 >
                                   Created by {creatorName}
                                 </button>
                               )
                             )}
                         </div>
-                        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-200">
-                          <span className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1">
-                            <span className="font-semibold text-white">{questionCount}</span>
-                            <span className="text-white/70">Questions</span>
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                          <span className="inline-flex items-center gap-2 rounded-lg border border-slate-200/80 bg-slate-100/70 px-2.5 py-1">
+                            <span className="font-semibold text-slate-800">{questionCount}</span>
+                            <span className="text-slate-500">Questions</span>
                           </span>
-                          <span className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1">
-                            <span className="font-semibold text-white">
+                          <span className="inline-flex items-center gap-2 rounded-lg border border-slate-200/80 bg-slate-100/70 px-2.5 py-1">
+                            <span className="font-semibold text-slate-800">
                               {passThreshold ?? 0}/{questionCount || 0}
                             </span>
-                            <span className="text-white/70">
+                            <span className="text-slate-500">
                               Pass {passPercent !== null ? `${passPercent}%` : "--"}
                             </span>
                           </span>
-                          <span className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1">
-                            <span className="font-semibold text-white">{allowsMultiple ? "Multi" : "Single"}</span>
-                            <span className="text-white">Correct</span>
+                          <span className="inline-flex items-center gap-2 rounded-lg border border-slate-200/80 bg-slate-100/70 px-2.5 py-1">
+                            <span className="font-semibold text-slate-800">{allowsMultiple ? "Multi" : "Single"}</span>
+                            <span className="text-slate-600">Correct</span>
                           </span>
-                          <span className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1">
-                            <span className="font-semibold text-white">{isQuizLocked ? "Locked" : "Editable"}</span>
-                            <span className="text-white">Answers</span>
+                          <span className="inline-flex items-center gap-2 rounded-lg border border-slate-200/80 bg-slate-100/70 px-2.5 py-1">
+                            <span className="font-semibold text-slate-800">{isQuizLocked ? "Locked" : "Editable"}</span>
+                            <span className="text-slate-600">Answers</span>
                           </span>
                         </div>
                       </div>
                     </>
                   );
 
-                  const cardClass = `group relative block bg-white/5 backdrop-blur rounded-2xl border border-white/10 overflow-hidden ${
-                    isAccountLocked ? "opacity-60 cursor-not-allowed" : "hover:border-white/30 transition-all hover:bg-white/10"
+                  const cardClass = `group relative block bg-white/80 backdrop-blur rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm ${
+                    isAccountLocked ? "opacity-60 cursor-not-allowed" : "hover:border-slate-300 transition-colors hover:bg-white"
                   }`;
 
                   return isAccountLocked ? (
@@ -759,24 +815,24 @@ export default function ProfilePage() {
             )}
           </div>
         )}
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20 mb-6 sm:mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">Quizzes Taken</h2>
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mb-6 sm:mb-8 shadow-sm">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-slate-800 mb-6">Quizzes Taken</h2>
           {takenQuizzes.length === 0 ? (
             <div className="text-center py-12">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="w-20 h-20 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">No Quizzes Yet</h3>
-              <p className="text-gray-300">
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">No Quizzes Yet</h3>
+              <p className="text-slate-600">
                 {isOwnProfile ? "Start taking quizzes to see your progress here" : `${profile.username} hasn't taken any quizzes yet`}
               </p>
               {isOwnProfile && !isAccountLocked && (
                 <div className="mt-6">
                   <Link
                     to="/"
-                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-purple-500/40 active:scale-95"
+                    className="inline-flex items-center justify-center rounded-xl bg-slate-800 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700"
                   >
                     Take a quiz
                   </Link>
@@ -792,17 +848,17 @@ export default function ProfilePage() {
                                      percentage >= 40 ? "from-amber-500 to-orange-600" :
                                      "from-red-500 to-pink-600";
 
-                const takenClass = `group block bg-white/5 backdrop-blur rounded-2xl p-5 border border-white/10 ${
-                  isAccountLocked ? "opacity-60 cursor-not-allowed" : "hover:border-white/30 transition-all hover:bg-white/10"
+                const takenClass = `group block bg-white/80 backdrop-blur rounded-2xl p-5 border border-slate-200/80 shadow-sm ${
+                  isAccountLocked ? "opacity-60 cursor-not-allowed" : "hover:border-slate-300 transition-colors hover:bg-white"
                 }`;
                 const takenContent = (
                   <>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-white mb-2">{quiz.title}</h3>
-                        <div className="flex flex-wrap items-center gap-3 text-sm text-gray-300">
+                        <h3 className="text-lg font-semibold text-slate-800 mb-2">{quiz.title}</h3>
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600">
                           <div className="flex items-center gap-1">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                             <span>
@@ -814,7 +870,7 @@ export default function ProfilePage() {
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
                             <span>{quiz.correct}/{quiz.totalQuestions} correct</span>
@@ -823,13 +879,13 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-center">
-                          <div className={`text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${gradientClass}`}>
+                          <div className={`text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r ${gradientClass}`}>
                             {percentage}%
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div className="mt-4 h-2 bg-slate-200/80 rounded-full overflow-hidden">
                       <div
                         className={`h-full bg-gradient-to-r ${gradientClass} transition-all duration-500`}
                         style={{ width: `${percentage}%` }}
@@ -851,22 +907,22 @@ export default function ProfilePage() {
             </div>
           )}
         </div>
-        <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/20">
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">Quizzes Created</h2>
-            <div className="px-4 py-2 bg-white/10 rounded-full">
-              <span className="text-white font-semibold">{createdQuizzes.length} Quiz{createdQuizzes.length !== 1 ? 'zes' : ''}</span>
+            <h2 className="text-2xl sm:text-3xl font-semibold text-slate-800">Quizzes Created</h2>
+            <div className="px-4 py-2 bg-slate-100/80 rounded-full border border-slate-200/80">
+              <span className="text-slate-700 font-semibold">{createdQuizzes.length} Quiz{createdQuizzes.length !== 1 ? 'zes' : ''}</span>
             </div>
           </div>
           {createdQuizzes.length === 0 ? (
             <div className="text-center py-12">
-              <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="w-20 h-20 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">No Quizzes Created</h3>
-              <p className="text-gray-300">
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">No Quizzes Created</h3>
+              <p className="text-slate-600">
                 {isOwnProfile ? "Create your first quiz to see it here" : `${profile.username} hasn't created any quizzes yet`}
               </p>
               {isOwnProfile && !isAccountLocked && (
@@ -874,7 +930,7 @@ export default function ProfilePage() {
                   <Link
                     to="/quizzes/create"
                     state={{ returnTo: location.pathname }}
-                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 px-6 py-2 text-sm font-semibold text-white transition-all hover:shadow-lg hover:shadow-indigo-500/40 active:scale-95"
+                    className="inline-flex items-center justify-center rounded-xl bg-slate-800 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700"
                   >
                     Create a quiz
                   </Link>
@@ -906,10 +962,10 @@ export default function ProfilePage() {
                       if (isAccountLocked) return;
                       window.location.href = `/quiz/${quiz._id}`;
                     }}
-                    className={`group relative bg-white/5 backdrop-blur rounded-2xl border border-white/10 overflow-hidden transform duration-300 ${
+                    className={`group relative bg-white/80 backdrop-blur rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transform duration-300 ${
                       isAccountLocked
                         ? "cursor-not-allowed opacity-60"
-                        : "hover:border-white/30 hover:bg-white/10 cursor-pointer hover:scale-[1.02]"
+                        : "hover:border-slate-300 hover:bg-white cursor-pointer transition-colors"
                     }`}
                   >
                     <div className={`flex items-center gap-2 px-4 py-2 bg-gradient-to-r ${categoryColors[quiz.category] || categoryColors.other}`}>
@@ -920,7 +976,7 @@ export default function ProfilePage() {
                     </div>
                     <div className="px-6 pt-4 pb-3">
                       <div className="flex items-center justify-between mb-4">
-                        <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 px-3 py-1.5 text-xs font-semibold text-slate-700">
                           <img src={`/${quiz.difficulty || "medium"}.svg`} alt="" aria-hidden="true" className="h-4 w-4" />
                           <span className="capitalize">{quiz.difficulty || "medium"}</span>
                         </span>
@@ -936,7 +992,7 @@ export default function ProfilePage() {
                                 });
                                 handleToggleFavourite(quiz._id, isFavourited);
                               }}
-                              className="h-10 w-10 rounded-xl bg-white/10 border border-white/20 backdrop-blur text-white/70 transition-all hover:text-yellow-200 hover:bg-white/20"
+                              className="h-10 w-10 rounded-xl bg-white/70 border border-slate-200/80 backdrop-blur text-slate-500 transition-colors hover:text-amber-500 hover:bg-white"
                               aria-label="Toggle favourite"
                               title="Toggle favourite"
                             >
@@ -962,7 +1018,7 @@ export default function ProfilePage() {
                                 setQuizToDelete(quiz);
                                 setShowDeleteConfirm(true);
                               }}
-                              className="h-10 w-10 rounded-xl bg-white/10 border border-white/20 backdrop-blur text-rose-200 transition-all hover:bg-rose-500/20 hover:text-rose-100"
+                              className="h-10 w-10 rounded-xl bg-white/70 border border-slate-200/80 backdrop-blur text-rose-500 transition-colors hover:bg-rose-100/70"
                               aria-label="Delete quiz"
                               title="Delete quiz"
                             >
@@ -975,27 +1031,27 @@ export default function ProfilePage() {
                       </div>
                       <div className="mb-3 h-16 w-full">
                         <h3
-                          className={`${titleSizeClass} font-bold text-white ${isAccountLocked ? "" : "group-hover:text-purple-300"} transition-colors line-clamp-2 text-center h-full w-full flex items-center justify-center`}
+                          className={`${titleSizeClass} font-semibold text-slate-800 ${isAccountLocked ? "" : "group-hover:text-slate-900"} transition-colors line-clamp-2 text-center h-full w-full flex items-center justify-center`}
                         >
                           {quiz.title}
                         </h3>
                       </div>
-                      <div className="mb-3 text-xs text-white/80 divide-y divide-white/10">
+                      <div className="mb-3 text-xs text-slate-600 divide-y divide-slate-200/80">
                         <div className="flex items-center justify-between py-2">
                           <span>Questions</span>
-                          <span className="font-semibold">{quiz.questions.length}</span>
+                          <span className="font-semibold text-slate-800">{quiz.questions.length}</span>
                         </div>
                         <div className="flex items-center justify-between py-2">
                           <span>Attempts</span>
-                          <span className="font-semibold">{totalAttempts}</span>
+                          <span className="font-semibold text-slate-800">{totalAttempts}</span>
                         </div>
                         <div className="flex items-center justify-between py-2">
                           <span>Pass Rate</span>
-                          <span className="font-semibold">{passRate}%</span>
+                          <span className="font-semibold text-slate-800">{passRate}%</span>
                         </div>
                         <div className="flex items-center justify-between py-2">
                           <span>Avg Score</span>
-                          <span className="font-semibold">{avgScore}%</span>
+                          <span className="font-semibold text-slate-800">{avgScore}%</span>
                         </div>
                       </div>
                       <div className={`grid gap-2 ${isOwnProfile ? "sm:grid-cols-2" : "grid-cols-1"}`}>
@@ -1007,7 +1063,7 @@ export default function ProfilePage() {
                                 state: { from: "profile", returnTo: `/users/${routeUsername}` }
                               });
                             }}
-                            className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white text-sm font-semibold hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+                            className="w-full px-4 py-2.5 bg-white/70 border border-slate-200/80 rounded-xl text-slate-700 text-sm font-semibold hover:bg-white transition-colors flex items-center justify-center gap-2"
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.862 4.487a2 2 0 112.828 2.828L8.828 18.175a4 4 0 01-1.414.944l-3.536 1.178 1.178-3.536a4 4 0 01.944-1.414L16.862 4.487z" />
@@ -1022,8 +1078,8 @@ export default function ProfilePage() {
                             handleViewStats(quiz._id);
                           }}
                           disabled={isAccountLocked}
-                          className={`w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-white text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
-                            isAccountLocked ? "opacity-50 cursor-not-allowed" : "hover:bg-white/20"
+                          className={`w-full px-4 py-2.5 bg-white/70 border border-slate-200/80 rounded-xl text-slate-700 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
+                            isAccountLocked ? "opacity-50 cursor-not-allowed" : "hover:bg-white"
                           }`}
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1032,8 +1088,8 @@ export default function ProfilePage() {
                           View Stats
                         </button>
                       </div>
-                      <div className="mt-4 flex items-center justify-center gap-1 text-xs text-white/80">
-                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className="mt-4 flex items-center justify-center gap-1 text-xs text-slate-500">
+                        <svg className="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         <span>
@@ -1059,12 +1115,12 @@ export default function ProfilePage() {
         />
       )}
       {showDeleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-800 rounded-2xl border border-white/20 p-6 max-w-md w-full shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/20 backdrop-blur-sm">
+          <div className="bg-white/90 rounded-2xl border border-slate-200/80 p-6 max-w-md w-full shadow-2xl">
             <div className="flex items-center gap-3 mb-4 text-left">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-rose-500/20">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-rose-100">
                 <svg
-                  className="h-6 w-6 text-rose-400"
+                  className="h-6 w-6 text-rose-500"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1078,24 +1134,24 @@ export default function ProfilePage() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Delete Quiz</h3>
-                <p className="text-sm text-gray-400">This action cannot be undone</p>
+                <h3 className="text-lg font-semibold text-slate-800">Delete Quiz</h3>
+                <p className="text-sm text-slate-500">This action cannot be undone</p>
               </div>
             </div>
-            <p className="text-gray-300 mb-6">
+            <p className="text-slate-600 mb-6">
               Are you sure you want to delete &apos;{quizToDelete?.title}&apos;? All quiz data,
               attempts, and leaderboard entries will be permanently removed.
             </p>
             <div className="flex gap-3">
               <button
-                className="flex-1 px-4 py-2.5 rounded-lg bg-rose-600 text-white font-semibold hover:bg-rose-700 transition-all"
+                className="flex-1 px-4 py-2.5 rounded-lg bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-colors"
                 type="button"
                 onClick={handleDeleteQuiz}
               >
                 Delete Quiz
               </button>
               <button
-                className="flex-1 px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/20 transition-all"
+                className="flex-1 px-4 py-2.5 rounded-lg bg-white/70 border border-slate-200/80 text-slate-700 font-semibold hover:bg-white transition-colors"
                 type="button"
                 onClick={() => {
                   setShowDeleteConfirm(false);
@@ -1108,6 +1164,7 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

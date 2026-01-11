@@ -36,129 +36,74 @@ export function Login() {
   }
 
 return (
-<div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
-<div className="absolute inset-0 overflow-hidden pointer-events-none">
-  <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-  <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
-</div>
-<div className="relative flex min-h-dvh items-start justify-center px-4 pt-6 pb-8">
-{/* Side category pillows (decorative) */}
-<div className="pointer-events-none absolute inset-0 hidden sm:block max-[380px]:hidden">
-  {/* Art */}
-  <div className="absolute left-[clamp(2.1rem,10.5vw,8.2rem)] top-[42%] -translate-y-1/2">
-    <div className="relative">
-      <div className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-fuchsia-500/20 via-violet-500/12 to-fuchsia-500/18 blur-2xl"></div>
-      <div className="relative inline-flex items-center gap-3 rounded-xl bg-gradient-to-b from-fuchsia-500/[0.18] via-white/[0.09] to-white/[0.06] px-5 py-3 ring-1 ring-white/10 shadow-[0_24px_70px_-50px_rgba(236,72,153,0.55)]">
-        <div className="absolute inset-x-4 top-1 h-px bg-gradient-to-r from-transparent via-fuchsia-200/60 to-transparent"></div>
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-fuchsia-500/24 via-violet-500/14 to-fuchsia-500/18 ring-1 ring-white/10 shadow-[0_14px_40px_-28px_rgba(236,72,153,0.45)] text-orange-200/95 drop-shadow-[0_2px_12px_rgba(251,146,60,0.35)]"><IconPalette/></span>
-        <span className="text-[20px] font-semibold drop-shadow-[0_2px_10px_rgba(168,85,247,0.16)]"><span className="text-pink-400/75">A</span><span className="text-fuchsia-400/55">r</span><span className="text-indigo-400/85">t</span></span>
-      </div>
+  <>
+    <div
+      className="fixed inset-0"
+      style={{
+        backgroundColor: "#f7f5f1",
+        backgroundImage: `
+          radial-gradient(1200px 800px at 5% 0%, rgba(255, 227, 170, 0.28), transparent 60%),
+          radial-gradient(900px 700px at 85% 10%, rgba(255, 190, 220, 0.24), transparent 55%),
+          radial-gradient(1000px 800px at 15% 90%, rgba(180, 220, 255, 0.24), transparent 60%),
+          radial-gradient(900px 800px at 85% 85%, rgba(190, 235, 210, 0.24), transparent 60%)
+        `
+      }}
+    ></div>
+    <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute top-1/4 left-1/4 w-[28rem] h-[28rem] bg-amber-200/30 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-[28rem] h-[28rem] bg-rose-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
+      <div className="absolute top-1/2 left-1/2 w-[30rem] h-[30rem] -translate-x-1/2 -translate-y-1/2 bg-sky-200/25 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
     </div>
-  </div>
-
-  {/* History */}
-  <div className="absolute left-[clamp(1.8rem,9.6vw,7.6rem)] top-[60%] -translate-y-1/2">
-    <div className="relative">
-      <div className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-fuchsia-500/18 via-violet-500/12 to-fuchsia-500/16 blur-2xl"></div>
-      <div className="relative inline-flex items-center gap-3 rounded-xl bg-gradient-to-b from-fuchsia-500/[0.17] via-white/[0.09] to-white/[0.06] px-6 py-3 ring-1 ring-white/10 shadow-[0_24px_70px_-50px_rgba(168,85,247,0.42)]">
-        <div className="absolute inset-x-4 top-1 h-px bg-gradient-to-r from-transparent via-fuchsia-200/60 to-transparent"></div>
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-white/10 ring-1 ring-white/10 shadow-[0_14px_40px_-30px_rgba(168,85,247,0.24)] text-orange-200/95 drop-shadow-[0_2px_12px_rgba(251,146,60,0.32)]"><IconLandmark/></span>
-        <span className="text-[20px] font-semibold drop-shadow-[0_2px_10px_rgba(168,85,247,0.16)]"><span className="text-pink-400/75">H</span><span className="text-fuchsia-400/55">i</span><span className="text-violet-400/65">s</span><span className="text-violet-400/65">t</span><span className="text-violet-400/65">o</span><span className="text-indigo-400/85">r</span><span className="text-indigo-400/85">y</span></span>
-      </div>
+    <div className="relative min-h-screen pt-16 sm:pt-20">
+      <main className="relative max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        <div className="mb-6 text-center">
+          <h1 className="text-3xl sm:text-4xl font-semibold text-slate-800 mb-2 select-none">Welcome back</h1>
+          <p className="text-slate-600">Log in to continue</p>
+        </div>
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-800">Log in</h2>
+          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+            <label htmlFor="email" className="block text-sm text-slate-600">Email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-2 w-full rounded-xl border border-slate-200/80 bg-white/70 px-4 py-3 text-slate-700 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-300/70"
+            />
+            <label htmlFor="password" className="block text-sm text-slate-600">Password</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-2 w-full rounded-xl border border-slate-200/80 bg-white/70 px-4 py-3 text-slate-700 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-300/70"
+            />
+            <input
+              role="submit-button"
+              id="submit"
+              type="submit"
+              value="Log in"
+              className="mt-2 w-full cursor-pointer rounded-xl bg-slate-800 text-white px-6 py-3 font-semibold transition-colors hover:bg-slate-700"
+            />
+          </form>
+          {error && (
+            <p className="mt-4 rounded-xl border border-rose-200/80 bg-rose-100/80 px-4 py-3 text-sm text-rose-700">
+              {error}
+            </p>
+          )}
+          <p className="mt-4 text-sm text-slate-600">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/signup"
+              className="text-slate-800 underline underline-offset-4 hover:text-slate-600"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
+      </main>
     </div>
-  </div>
-
-  {/* Music */}
-  <div className="absolute right-[clamp(2.1rem,10.5vw,8.2rem)] top-[34%] -translate-y-1/2">
-    <div className="relative">
-      <div className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-fuchsia-500/16 via-violet-500/12 to-fuchsia-500/16 blur-2xl"></div>
-      <div className="relative inline-flex items-center gap-3 rounded-xl bg-gradient-to-b from-fuchsia-500/[0.16] via-white/[0.09] to-white/[0.06] px-6 py-3 ring-1 ring-white/10 shadow-[0_24px_70px_-50px_rgba(168,85,247,0.38)]">
-        <div className="absolute inset-x-4 top-1 h-px bg-gradient-to-r from-transparent via-fuchsia-200/60 to-transparent"></div>
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-white/10 ring-1 ring-white/10 shadow-[0_14px_40px_-30px_rgba(168,85,247,0.22)] text-orange-200/95 drop-shadow-[0_2px_12px_rgba(251,146,60,0.30)]"><IconMusic/></span>
-        <span className="text-[20px] font-semibold drop-shadow-[0_2px_10px_rgba(168,85,247,0.16)]"><span className="text-pink-400/75">M</span><span className="text-fuchsia-400/55">u</span><span className="text-violet-400/65">s</span><span className="text-indigo-400/85">i</span><span className="text-indigo-400/85">c</span></span>
-      </div>
-    </div>
-  </div>
-
-  {/* Science */}
-  <div className="absolute right-[clamp(1.8rem,9.6vw,7.6rem)] top-[54%] -translate-y-1/2">
-    <div className="relative">
-      <div className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-fuchsia-500/16 via-violet-500/12 to-fuchsia-500/16 blur-2xl"></div>
-      <div className="relative inline-flex items-center gap-3 rounded-xl bg-gradient-to-b from-fuchsia-500/[0.16] via-white/[0.09] to-white/[0.06] px-6 py-3 ring-1 ring-white/10 shadow-[0_24px_70px_-50px_rgba(168,85,247,0.38)]">
-        <div className="absolute inset-x-4 top-1 h-px bg-gradient-to-r from-transparent via-fuchsia-200/60 to-transparent"></div>
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-white/10 ring-1 ring-white/10 shadow-[0_14px_40px_-30px_rgba(168,85,247,0.22)] text-orange-200/95 drop-shadow-[0_2px_12px_rgba(251,146,60,0.30)]"><IconUser/></span>
-        <span className="text-[20px] font-semibold drop-shadow-[0_2px_10px_rgba(168,85,247,0.16)]"><span className="text-pink-400/75">S</span><span className="text-fuchsia-400/55">c</span><span className="text-violet-400/65">i</span><span className="text-violet-400/65">e</span><span className="text-violet-400/65">n</span><span className="text-indigo-400/85">c</span><span className="text-indigo-400/85">e</span></span>
-      </div>
-    </div>
-  </div>
-
-  {/* Other */}
-  <div className="absolute right-[clamp(2.1rem,10.5vw,8.2rem)] top-[74%] -translate-y-1/2">
-    <div className="relative">
-      <div className="absolute -inset-3 rounded-2xl bg-gradient-to-r from-fuchsia-500/18 via-violet-500/12 to-fuchsia-500/18 blur-2xl"></div>
-      <div className="relative inline-flex min-w-[170px] justify-center items-center gap-3 rounded-xl bg-gradient-to-b from-fuchsia-500/[0.18] via-white/[0.09] to-white/[0.06] px-6 py-3 ring-1 ring-white/10 shadow-[0_24px_70px_-50px_rgba(236,72,153,0.45)]">
-        <div className="absolute inset-x-4 top-1 h-px bg-gradient-to-r from-transparent via-fuchsia-200/60 to-transparent"></div>
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-white/10 ring-1 ring-white/10 shadow-[0_14px_40px_-30px_rgba(168,85,247,0.22)] text-orange-200/95 drop-shadow-[0_2px_12px_rgba(251,146,60,0.32)]"><IconStar/></span>
-        <span className="text-[20px] font-semibold drop-shadow-[0_2px_10px_rgba(168,85,247,0.16)]"><span className="text-pink-400/75">O</span><span className="text-fuchsia-400/55">t</span><span className="text-violet-400/65">h</span><span className="text-indigo-400/85">e</span><span className="text-indigo-400/85">r</span></span>
-      </div>
-    </div>
-  </div>
-</div>
-{/* Auth card container (keeps the form centered and readable) */} 
-<div className="w-full max-w-md">
-{/* Top pill */}
-<div className="mx-auto mt-4 mb-4 flex w-fit items-center gap-3 rounded-full border border-white/10 bg-white/5 px-5 py-3 backdrop-blur">
-  <span className="inline-flex items-center gap-2 text-sm sm:text-base font-medium tracking-wide text-white/70">
-    <span className="h-1 w-1 rounded-full bg-violet-200/45" />
-    Pick a category
-  </span>
-  <span className="h-1 w-1 rounded-full bg-violet-200/35" />
-<button type="button" className="text-sm sm:text-base font-medium tracking-wide text-white/65 transition hover:text-white/80">
-    Play
-  </button>
-  <span className="h-1 w-1 rounded-full bg-violet-200/45" />
-<button type="button" className="text-sm sm:text-base font-medium tracking-wide text-white/65 transition hover:text-white/80">
-    Add friends
-  </button>
-</div>
-
-      <h1 className="text-center text-3xl sm:text-4xl font-semibold tracking-tight">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400">
-          Welcome to Quizr.fun
-        </span>
-      </h1>
-      <p className="mt-2 text-center text-sm sm:text-base font-medium tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-indigo-300">
-
-        Expand your knowledge — one quiz at a time.
-      </p>
-
-      <div className="mt-6 bg-white/10 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-6 border border-white/20">
-      <h2 className="text-lg font-medium">Log in</h2>
-      <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-      <label htmlFor="email" className="block text-sm text-white/80">Email</label>
-      <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:ring-2 focus:ring-purple-400/60" />
-      <label htmlFor="password" className="block text-sm text-white/80">Password</label>
-      <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2 w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-white/50 focus:ring-2 focus:ring-purple-400/60" />
-      <input role="submit-button" id="submit" type="submit" value="Log in" className="mt-2 w-full cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all transform hover:scale-105 active:scale-95" />
-</form>
-
-  {error && ( 
-    <p className="mt-4 rounded-xl border border-rose-400/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-100"> 
-      {error}
-    </p>
-)}
-  <p className="mt-4 text-sm text-white/70">
-    Don&apos;t have an account?{" "}
-    <Link
-      to="/signup"
-      className="text-pink-300 hover:text-pink-200 underline underline-offset-4"
-    >
-      Sign up
-    </Link>
-      </p>
-      </div>
-    </div>
-  </div>
-</div>
+  </>
 );
 }

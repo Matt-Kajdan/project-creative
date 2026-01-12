@@ -1,10 +1,8 @@
-// src/components/Auth.js
-import { createContext, useContext, useEffect, useState } from "react";
+// src/components/Auth.jsx
+import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../services/firebase";
-
-const AuthContext = createContext(null);
-export const useAuth = () => useContext(AuthContext);
+import { AuthContext } from "../context/AuthContext";
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
@@ -20,10 +18,16 @@ export const AuthProvider = ({ children }) => {
 
     if (loading) {
         return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 text-white">
-            <div className="text-center">
-            <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto"></div>
-            <p className="mt-4">Checking authentication...</p>
+        <div
+            className="fixed inset-0 flex items-center justify-center"
+            style={{
+            backgroundColor: "var(--opal-bg-color)",
+            backgroundImage: "var(--opal-backdrop-image)"
+            }}
+        >
+            <div className="relative flex flex-col items-center">
+            <div className="w-16 h-16 border-4 border-slate-300 dark:border-slate-700 border-t-slate-600 dark:border-t-slate-200 rounded-full animate-spin"></div>
+            <p className="mt-4 text-slate-600 dark:text-slate-300 font-medium">Checking authentication...</p>
             </div>
         </div>
         );

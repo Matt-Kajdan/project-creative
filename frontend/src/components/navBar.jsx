@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../services/firebase";
-import { useAuth } from "./Auth";
-import { apiFetch } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
+import { useTheme } from "../hooks/useTheme";
 import UserSearchBar from "./UserSearchBar";
 
-function NavBar() {
+function NavBar({ accountStatus, accountUsername }) {
   const user = useAuth();
+  const { theme, toggleTheme, isLoading } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const [username, setUsername] = useState(null);
-  const [accountStatus, setAccountStatus] = useState("active");
-  const [statusRefreshKey, setStatusRefreshKey] = useState(0);
+  const username = accountUsername;
+  const isAccountLocked = accountStatus === "pending_deletion";
   const profileLabel = username || "Profile";
   const profileSizeClass =
     username && username.length > 16
       ? "text-xs"
       : username && username.length > 12
-      ? "text-sm"
-      : "text-sm";
+        ? "text-sm"
+        : "text-sm";
 
   useEffect(() => {
     // redirect to login when we know there's no user
@@ -28,81 +28,91 @@ function NavBar() {
     }
   }, [user, navigate]);
 
-  useEffect(() => {
-    async function fetchUsername() {
-      if (user) {
-        try {
-          const res = await apiFetch("/me"); // Changed from /users/me to /me
-          const body = await res.json();
-          setUsername(body.user?.username);
-          setAccountStatus(body.user?.status || "active");
-        } catch (err) {
-          console.error("Could not fetch username", err);
-        }
-      }
-    }
-    fetchUsername();
-  }, [user, location.pathname, location.search, navigate, statusRefreshKey]); // Added location as dependency
-
-  useEffect(() => {
-    function handleStatusChange() {
-      setStatusRefreshKey((value) => value + 1);
-    }
-    window.addEventListener("account-status-changed", handleStatusChange);
-    return () => window.removeEventListener("account-status-changed", handleStatusChange);
-  }, []);
-
-  const isAccountLocked = accountStatus === "pending_deletion";
+  // Don't render until theme is loaded
+  if (isLoading) {
+    return null;
+  }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/10">
+    <nav className="fixed top-0 left-0 z-50 w-screen bg-white/70 dark:bg-slate-900/90 backdrop-blur-lg border-b border-slate-200/80 dark:border-slate-800/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-1.5">
             {!isAccountLocked && (
               <>
                 <NavLink
                   to="/"
+                  onClick={(event) => {
+                    if (location.pathname === "/") {
+                      event.preventDefault();
+                      navigate(0);
+                    }
+                  }}
                   className={({ isActive }) =>
-                    `text-sm font-medium transition-colors ${isActive ? "text-purple-400" : "text-gray-300 hover:text-white"}`
+                    `text-sm transition-all duration-200 h-11 px-4 min-w-[5.5rem] justify-center rounded-xl inline-flex items-center ${isActive
+                      ? "text-slate-900 dark:text-slate-100 font-bold hover:text-slate-900 dark:hover:text-slate-100 dark:hover:bg-slate-800/40"
+                      : "text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 dark:hover:bg-slate-800/40"
+                    }`
                   }
                 >
-                  Home
+                  <span className="inline-grid items-center leading-none">
+                    <span aria-hidden="true" className="col-start-1 row-start-1 font-bold leading-none opacity-0">
+                      Home
+                    </span>
+                    <span className="col-start-1 row-start-1 leading-none">Home</span>
+                  </span>
                 </NavLink>
                 <NavLink
                   to="/quizzes/create"
+                  state={{ returnTo: location.pathname }}
                   className={({ isActive }) =>
-                    `text-sm font-medium transition-colors ${isActive ? "text-purple-400" : "text-gray-300 hover:text-white"}`
+                    `text-sm transition-all duration-200 h-11 px-4 min-w-[7.5rem] justify-center rounded-xl inline-flex items-center ${isActive
+                      ? "text-slate-900 dark:text-slate-100 font-bold hover:text-slate-900 dark:hover:text-slate-100 dark:hover:bg-slate-800/40"
+                      : "text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 dark:hover:bg-slate-800/40"
+                    }`
                   }
                 >
-                  Create Quiz
+                  <span className="inline-grid items-center leading-none">
+                    <span aria-hidden="true" className="col-start-1 row-start-1 font-bold leading-none opacity-0">
+                      Create Quiz
+                    </span>
+                    <span className="col-start-1 row-start-1 leading-none">Create Quiz</span>
+                  </span>
                 </NavLink>
                 {user && (
                   <NavLink
                     to="/friends"
                     className={({ isActive }) =>
-                      `text-sm font-medium transition-colors ${
-                        isActive
-                          ? "text-purple-400"
-                          : "text-gray-300 hover:text-white"
+                      `text-sm transition-all duration-200 h-11 px-4 min-w-[6.5rem] justify-center rounded-xl inline-flex items-center ${isActive
+                        ? "text-slate-900 dark:text-slate-100 font-bold hover:text-slate-900 dark:hover:text-slate-100 dark:hover:bg-slate-800/40"
+                        : "text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 dark:hover:bg-slate-800/40"
                       }`
                     }
                   >
-                    Friends
+                    <span className="inline-grid items-center leading-none">
+                      <span aria-hidden="true" className="col-start-1 row-start-1 font-bold leading-none opacity-0">
+                        Friends
+                      </span>
+                      <span className="col-start-1 row-start-1 leading-none">Friends</span>
+                    </span>
                   </NavLink>
                 )}
                 {user && (
                   <NavLink
                     to="/leaderboard"
                     className={({ isActive }) =>
-                      `text-sm font-medium transition-colors ${
-                        isActive
-                          ? "text-purple-400"
-                          : "text-gray-300 hover:text-white"
+                      `text-sm transition-all duration-200 h-11 px-4 min-w-[8.5rem] justify-center rounded-xl inline-flex items-center ${isActive
+                        ? "text-slate-900 dark:text-slate-100 font-bold hover:text-slate-900 dark:hover:text-slate-100 dark:hover:bg-slate-800/40"
+                        : "text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 dark:hover:bg-slate-800/40"
                       }`
                     }
                   >
-                    Leaderboard
+                    <span className="inline-grid items-center leading-none">
+                      <span aria-hidden="true" className="col-start-1 row-start-1 font-bold leading-none opacity-0">
+                        Leaderboard
+                      </span>
+                      <span className="col-start-1 row-start-1 leading-none">Leaderboard</span>
+                    </span>
                   </NavLink>
                 )}
               </>
@@ -115,24 +125,73 @@ function NavBar() {
           </div>
 
           <div className="flex items-center gap-3">
+            {user && (
+              <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                className="h-10 w-10 inline-flex items-center justify-center rounded-xl text-slate-700 dark:text-slate-300 dark:hover:bg-slate-700/50 transition-colors"
+                title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {theme === "dark" ? (
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="4" />
+                    <path d="M12 2v2" />
+                    <path d="M12 20v2" />
+                    <path d="m4.93 4.93 1.41 1.41" />
+                    <path d="m17.66 17.66 1.41 1.41" />
+                    <path d="M2 12h2" />
+                    <path d="M20 12h2" />
+                    <path d="m6.34 17.66-1.41 1.41" />
+                    <path d="m19.07 4.93-1.41 1.41" />
+                  </svg>
+                ) : (
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                  </svg>
+                )}
+              </button>
+            )}
             {user && username && (
               <NavLink
                 to={`/users/${username}`}
                 className={({ isActive }) =>
-                  `${profileSizeClass} font-medium transition-colors ${
-                    isActive
-                      ? "text-purple-400"
-                      : "text-gray-300 hover:text-white"
+                  `${profileSizeClass} transition-all duration-200 h-11 px-4 min-w-[6.5rem] justify-center rounded-xl inline-flex items-center ${isActive
+                    ? "text-slate-900 dark:text-slate-100 font-bold hover:text-slate-900 dark:hover:text-slate-100 dark:hover:bg-slate-800/40"
+                    : "text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 dark:hover:bg-slate-800/40"
                   }`
                 }
               >
-                {profileLabel}
+                <span className="inline-grid items-center leading-none">
+                  <span aria-hidden="true" className="col-start-1 row-start-1 font-bold leading-none opacity-0">
+                    {profileLabel}
+                  </span>
+                  <span className="col-start-1 row-start-1 leading-none">{profileLabel}</span>
+                </span>
               </NavLink>
             )}
             {user && (
               <button
                 onClick={() => signOut(auth)}
-                className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all transform hover:scale-105 active:scale-95"
+                className="bg-slate-800 dark:bg-slate-900 text-white dark:text-slate-100 px-4 py-2 rounded-xl text-sm font-semibold shadow-sm transition-colors hover:bg-slate-700 dark:hover:bg-slate-700 dark:border dark:border-slate-800/50"
               >
                 Sign out
               </button>

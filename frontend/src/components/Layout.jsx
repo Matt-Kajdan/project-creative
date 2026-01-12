@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "./navBar";
+import { useAuth } from "../hooks/useAuth";
 import { Outlet } from "react-router-dom";
-import { useAuth } from "./Auth";
 import { apiFetch } from "../services/api";
 
-function Layout () {
+function Layout() {
     const location = useLocation();
     const navigate = useNavigate();
     const user = useAuth();
@@ -28,8 +28,9 @@ function Layout () {
                 const res = await apiFetch("/me");
                 const body = await res.json();
                 if (!mounted) return;
-                setAccountStatus(body.user?.status || "active");
-                setAccountUsername(body.user?.username || null);
+                // Status can be in different locations depending on the API response
+                setAccountStatus(body.user?.user_data?.status || body.user?.status || "active");
+                setAccountUsername(body.user?.user_data?.username || null);
             } catch (error) {
                 if (!mounted) return;
                 setAccountStatus(null);
@@ -58,9 +59,9 @@ function Layout () {
 
     return (
         <>
-        {!hideNavbar && <NavBar />}
-        <main><Outlet /></main>
+            {!hideNavbar && <NavBar accountStatus={accountStatus} accountUsername={accountUsername} />}
+            <main><Outlet /></main>
         </>
-);
+    );
 }
 export default Layout;

@@ -61,10 +61,10 @@ export default function FriendsPage() {
   };
 
   const avatarGradients = [
-    "from-rose-300 to-pink-400",
-    "from-sky-300 to-blue-400",
-    "from-emerald-300 to-green-400",
-    "from-orange-300 to-amber-400"
+    "from-rose-300 to-pink-400 dark:from-rose-500/80 dark:to-pink-600/80",
+    "from-sky-300 to-blue-400 dark:from-sky-500/80 dark:to-blue-600/80",
+    "from-emerald-300 to-green-400 dark:from-emerald-500/80 dark:to-green-600/80",
+    "from-orange-300 to-amber-400 dark:from-orange-500/80 dark:to-amber-600/80"
   ];
   const getAvatarGradient = (userId) => {
     const value = String(userId || "");

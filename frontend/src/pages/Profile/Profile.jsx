@@ -38,6 +38,21 @@ export default function ProfilePage() {
   const [sortDirection, setSortDirection] = useState("desc");
   const [takenSortBy, setTakenSortBy] = useState("highest_score");
   const [takenSortDirection, setTakenSortDirection] = useState("desc");
+  const avatarGradients = [
+    "from-rose-300 to-pink-400 dark:from-rose-500/80 dark:to-pink-600/80",
+    "from-sky-300 to-blue-400 dark:from-sky-500/80 dark:to-blue-600/80",
+    "from-emerald-300 to-green-400 dark:from-emerald-500/80 dark:to-green-600/80",
+    "from-orange-300 to-amber-400 dark:from-orange-500/80 dark:to-amber-600/80"
+  ];
+  const getAvatarGradient = (userId) => {
+    const value = String(userId || "");
+    let hash = 0;
+    for (let i = 0; i < value.length; i += 1) {
+      hash = (hash * 31 + value.charCodeAt(i)) % avatarGradients.length;
+    }
+    return avatarGradients[hash];
+  };
+
   const returnTo = location.pathname;
 
   useEffect(() => {
@@ -575,11 +590,11 @@ export default function ProfilePage() {
             <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 relative overflow-hidden shadow-sm">
               <div className="flex flex-col sm:flex-row items-center gap-6">
                 <div className="relative">
-                  <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-[30%] overflow-hidden border-2 border-slate-200/80 bg-amber-200/70 flex items-center justify-center">
+                  <div className={`w-20 h-20 sm:w-28 sm:h-28 rounded-[30%] overflow-hidden border-2 border-slate-200/80 bg-gradient-to-br ${getAvatarGradient(profile._id)} flex items-center justify-center`}>
                     {profile.user_data?.profile_pic ? (
                       <img src={profile.user_data.profile_pic} alt={profile.user_data.username} className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-slate-700 text-3xl sm:text-4xl font-semibold">
+                      <span className="text-white text-3xl sm:text-4xl font-semibold">
                         {profile.user_data?.username?.charAt(0).toUpperCase()}
                       </span>
                     )}

@@ -536,13 +536,13 @@ function TakeQuizPage() {
                         <div className="bg-white/70 backdrop-blur-lg rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
                             <div className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-6 py-4 sm:px-8 ${activeCategoryStyle.header}`}>
                                 <div className="inline-flex items-center gap-2 text-slate-700 font-semibold text-sm uppercase tracking-wide">
-                                    <span className={`inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold dark:bg-slate-900/60 dark:border-slate-800/80 ${activeCategoryStyle.badge}`}>
+                                    <span className={`inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold dark:bg-slate-900/60 dark:border-slate-800/80 cursor-default ${activeCategoryStyle.badge}`}>
                                         <svg className="w-4 h-4 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             {categoryIcons[quiz.category] || categoryIcons.other}
                                         </svg>
                                         <span className="capitalize">{quiz.category}</span>
                                     </span>
-                                    <span className="inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold normal-case border border-slate-200/80 bg-white/40 text-slate-700 dark:bg-slate-900/60 dark:border-slate-800/80 dark:text-slate-300">
+                                    <span className="inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-semibold normal-case border border-slate-200/80 bg-white/40 text-slate-700 dark:bg-slate-900/60 dark:border-slate-800/80 dark:text-slate-300 cursor-default">
                                         <svg
                                             className="h-4 w-4 text-current"
                                             viewBox="0 0 24 24"
@@ -874,7 +874,7 @@ function TakeQuizPage() {
                                 <span>Question {currentIndex + 1} of {quiz.questions.length}</span>
                                 <div className="flex flex-wrap items-center gap-2">
                                     <span
-                                        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide dark:bg-slate-900/60 dark:border-slate-800/80 ${activeCategoryStyle.badge}`}
+                                        className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide dark:bg-slate-900/60 dark:border-slate-800/80 cursor-default ${activeCategoryStyle.badge}`}
                                     >
                                         <svg className="w-4 h-4 text-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             {categoryIcons[quiz.category] || categoryIcons.other}
@@ -882,7 +882,7 @@ function TakeQuizPage() {
                                         <span className="capitalize">{quiz.category}</span>
                                     </span>
                                     <span
-                                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200/80 bg-white/40 text-slate-700 dark:bg-slate-900/60 dark:border-slate-800/80 dark:text-slate-300 text-xs font-semibold normal-case"
+                                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200/80 bg-white/40 text-slate-700 dark:bg-slate-900/60 dark:border-slate-800/80 dark:text-slate-300 text-xs font-semibold normal-case cursor-default"
                                     >
                                         <svg
                                             className="h-4 w-4 text-current"
@@ -909,9 +909,9 @@ function TakeQuizPage() {
                                         <button
                                             key={answer._id}
                                             className={`text-left px-4 py-3 rounded-xl border transition-colors ${isSelected
-                                                ? "bg-slate-100/80 border-slate-300 text-slate-900 dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+                                                ? "bg-slate-100/80 border-slate-300 text-slate-900 dark:bg-slate-900/90 dark:border-slate-700/50 dark:text-white"
                                                 : "bg-white/60 border-slate-200/80 text-slate-700 dark:bg-slate-900/40 dark:border-slate-800/60 dark:text-slate-300"
-                                                } ${isLocked ? "cursor-not-allowed opacity-60" : "hover:bg-slate-100 dark:hover:bg-slate-800/60"}`}
+                                                } ${isLocked ? "cursor-not-allowed opacity-60" : "hover:bg-slate-100 dark:hover:bg-slate-900/60"}`}
                                             onClick={() => handleSelect(answer._id)}
                                             type="button"
                                             disabled={isLocked}
@@ -956,7 +956,7 @@ function TakeQuizPage() {
                                 </button>
                                 {!isLastQuestion && (
                                     <button
-                                        className="flex-1 min-w-[160px] px-6 py-3 rounded-xl bg-slate-800 dark:bg-slate-900/85 dark:border dark:border-slate-800/60 text-white font-semibold hover:bg-slate-700 dark:hover:bg-slate-900 transition-colors disabled:opacity-50"
+                                        className="flex-1 min-w-[160px] px-6 py-3 rounded-xl bg-slate-800 dark:bg-slate-900/95 dark:border dark:border-slate-600/60 text-white font-semibold hover:bg-slate-700 dark:hover:bg-slate-800/90 transition-colors disabled:opacity-50"
                                         onClick={goNext}
                                         disabled={currentSelections.length === 0}
                                         type="button"
@@ -966,7 +966,7 @@ function TakeQuizPage() {
                                 )}
                                 {isLastQuestion && (
                                     <button
-                                        className="flex-1 min-w-[160px] px-6 py-3 rounded-xl bg-slate-800 dark:bg-slate-900/85 dark:border dark:border-slate-800/60 text-white font-semibold hover:bg-slate-700 dark:hover:bg-slate-900 transition-colors disabled:opacity-50"
+                                        className="flex-1 min-w-[160px] px-6 py-3 rounded-xl bg-slate-800 dark:bg-slate-900/95 dark:border dark:border-slate-600/60 text-white font-semibold hover:bg-slate-700 dark:hover:bg-slate-800/90 transition-colors disabled:opacity-50"
                                         onClick={submitQuiz}
                                         disabled={currentSelections.length === 0}
                                         type="button"
@@ -981,13 +981,13 @@ function TakeQuizPage() {
                     {phase === "done" && result && (
                         <div className="relative bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm text-center">
                             <div className="absolute left-4 top-4 flex flex-wrap gap-3">
-                                <span className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold text-slate-700 ${activeCategoryStyle.badge}`}>
+                                <span className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold text-slate-700 cursor-default ${activeCategoryStyle.badge}`}>
                                     <svg className="w-5 h-5 text-current" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                         {categoryIcons[quiz.category] || categoryIcons.other}
                                     </svg>
                                     <span className="capitalize">{quiz.category || "Other"}</span>
                                 </span>
-                                <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-sm font-semibold text-slate-700">
+                                <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-sm font-semibold text-slate-700 cursor-default">
                                     <svg
                                         className="w-5 h-5 text-current"
                                         viewBox="0 0 24 24"

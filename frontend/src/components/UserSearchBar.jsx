@@ -81,7 +81,7 @@ export default function UserSearchBar({ excludeUsername }) {
           }
         }}
         placeholder="Search users…"
-        className="w-full rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 px-4 py-2 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/30 dark:focus:ring-slate-700/50 transition-all"
+        className="w-full rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 px-4 py-2 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/30 dark:focus:ring-slate-500/50 transition-all"
       />
 
       {open && (
@@ -110,7 +110,7 @@ export default function UserSearchBar({ excludeUsername }) {
                     className="h-7 w-7 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="h-7 w-7 rounded-full bg-slate-200/80 dark:bg-slate-800/80" />
+                  <div className="h-7 w-7 rounded-full bg-slate-200/80 dark:bg-slate-900/60" />
                 )}
                 <span>{u.username}</span>
               </button>

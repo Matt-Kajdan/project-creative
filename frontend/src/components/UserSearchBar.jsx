@@ -66,6 +66,7 @@ export default function UserSearchBar({ excludeUsername }) {
   return (
     <div className="relative w-full max-w-md">
       <input
+        type="text"
         value={q}
         onChange={(e) => setQ(e.target.value)}
         onFocus={() => {
@@ -81,17 +82,17 @@ export default function UserSearchBar({ excludeUsername }) {
           }
         }}
         placeholder="Search users…"
-        className="w-full rounded-full bg-white/10 border border-white/10 px-4 py-2 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="w-full rounded-xl bg-white/50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 px-4 py-2 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/30 dark:focus:ring-white/40 focus:shadow-[0_0_12px_-2px_rgba(100,116,139,0.25)] dark:focus:shadow-[0_0_16px_-2px_rgba(255,255,255,0.15)] transition-all"
       />
 
       {open && (
-        <div className="absolute mt-2 w-full rounded-xl border border-white/10 bg-slate-900 backdrop-blur-md shadow-lg overflow-hidden z-50">
+        <div className="absolute mt-2 w-full rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white/95 dark:bg-slate-950/80 backdrop-blur-md shadow-lg overflow-hidden z-50">
           {loading && (
-            <div className="px-4 py-2 text-sm text-gray-300">Searching…</div>
+            <div className="px-4 py-2 text-sm text-slate-500 dark:text-slate-300">Searching…</div>
           )}
 
           {!loading && users.length === 0 && (
-            <div className="px-4 py-2 text-sm text-gray-400">No users found</div>
+            <div className="px-4 py-2 text-sm text-slate-400 dark:text-slate-500">No users found</div>
           )}
 
           {!loading &&
@@ -101,17 +102,8 @@ export default function UserSearchBar({ excludeUsername }) {
                 type="button"
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => selectUser(u.username)}
-                className="w-full text-left px-4 py-5 text-sm text-gray-200 hover:bg-white/10 flex items-center gap-3"
+                className="w-full text-left px-4 py-5 text-sm text-slate-800 dark:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-900/60 flex items-center gap-3"
               >
-                {u.profile_pic ? (
-                  <img
-                    src={u.profile_pic}
-                    alt=""
-                    className="h-7 w-7 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="h-7 w-7 rounded-full bg-white/10" />
-                )}
                 <span>{u.username}</span>
               </button>
             ))}

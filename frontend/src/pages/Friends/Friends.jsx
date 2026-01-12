@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../services/firebase"
@@ -11,28 +11,31 @@ export default function FriendsPage() {
   const [friends, setFriends] = useState([]);
   const [pending, setPending] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [confirmRemoveId, setConfirmRemoveId] = useState(null);
+  const [friendsSort, setFriendsSort] = useState("newest");
+  const [pendingSort, setPendingSort] = useState("newest");
 
-const loadData = useCallback(async () => {
-  try {
-    const profileRes = await apiFetch("/users/me");
-    const profileBody = await profileRes.json();
-    setProfile(profileBody.user)
-    const friendsData = await getFriends();
-    setFriends(friendsData.friends || []);
-    const pendingData = await getPendingRequests()
-    setPending(pendingData.requests || [])
-  } catch (err) {
-    console.error("Failed to load friend data", err)
-  } finally {
-    setLoading(false)
+  const loadData = useCallback(async () => {
+    try {
+      const profileRes = await apiFetch("/users/me");
+      const profileBody = await profileRes.json();
+      setProfile(profileBody.user)
+      const friendsData = await getFriends();
+      setFriends(friendsData.friends || []);
+      const pendingData = await getPendingRequests()
+      setPending(pendingData.requests || [])
+    } catch (err) {
+      console.error("Failed to load friend data", err)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  const getOtherUser = (friendDoc) => {
+    return friendDoc.user1._id.toString() === profile._id.toString()
+      ? friendDoc.user2 : friendDoc.user1;
   }
-}, [])
-
-const getOtherUser = (friendDoc) => {
-  return friendDoc.user1._id.toString() === profile._id.toString()
-    ? friendDoc.user2 : friendDoc.user1;
-}
-const isIncoming = (request) => request.user2._id === profile._id
+  const isIncoming = useCallback((request) => profile && request.user2?._id === profile._id, [profile]);
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (currentUser) => {
       // setUser(currentUser);
@@ -52,356 +55,400 @@ const isIncoming = (request) => request.user2._id === profile._id
     await loadData();
   }
 
-  const gradients = [
-    "from-rose-500 to-pink-600",
-    "from-violet-500 to-purple-600",
-    "from-blue-500 to-cyan-600",
-    "from-emerald-500 to-teal-600",
-    "from-amber-500 to-orange-600",
-    "from-fuchsia-500 to-pink-600"
+  const opalBackdropStyle = {
+    backgroundColor: "var(--opal-bg-color)",
+    backgroundImage: "var(--opal-backdrop-image)"
+  };
+
+  const avatarGradients = [
+    "from-rose-300 to-pink-400 dark:from-rose-500/80 dark:to-pink-600/80",
+    "from-sky-300 to-blue-400 dark:from-sky-500/80 dark:to-blue-600/80",
+    "from-emerald-300 to-green-400 dark:from-emerald-500/80 dark:to-green-600/80",
+    "from-orange-300 to-amber-400 dark:from-orange-500/80 dark:to-amber-600/80"
   ];
+  const getAvatarGradient = (userId) => {
+    const value = String(userId || "");
+    let hash = 0;
+    for (let i = 0; i < value.length; i += 1) {
+      hash = (hash * 31 + value.charCodeAt(i)) % avatarGradients.length;
+    }
+    return avatarGradients[hash];
+  };
+  const sortedFriends = useMemo(() => {
+    const items = [...friends];
+    items.sort((a, b) => {
+      const aTime = new Date(a.createdAt || a.created_at || 0).getTime();
+      const bTime = new Date(b.createdAt || b.created_at || 0).getTime();
+      return friendsSort === "newest" ? bTime - aTime : aTime - bTime;
+    });
+    return items;
+  }, [friends, friendsSort]);
+  const sortedPending = useMemo(() => {
+    const items = [...pending];
+    items.sort((a, b) => {
+      const aTime = new Date(a.createdAt || a.created_at || 0).getTime();
+      const bTime = new Date(b.createdAt || b.created_at || 0).getTime();
+      return pendingSort === "newest" ? bTime - aTime : aTime - bTime;
+    });
+    return items;
+  }, [pending, pendingSort]);
+  const incomingPending = useMemo(
+    () => sortedPending.filter((request) => isIncoming(request)),
+    [sortedPending, isIncoming]
+  );
+  const outgoingPending = useMemo(
+    () => sortedPending.filter((request) => !isIncoming(request)),
+    [sortedPending, isIncoming]
+  );
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div
+        className="fixed inset-0 flex items-center justify-center"
+        style={opalBackdropStyle}
+      >
         <div className="relative flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-          <p className="mt-4 text-white font-medium">Loading friends...</p>
+          <div className="w-16 h-16 border-4 border-slate-300 border-t-slate-600 rounded-full animate-spin"></div>
+          <p className="mt-4 text-slate-600 font-medium">Loading friends...</p>
         </div>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700">
-        <div className="relative flex flex-col items-center">
-          <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-          <p className="mt-4 text-white font-medium">Loading friends...</p>
-        </div>
-        <main className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 min-h-full">
-          <div className="mb-8 sm:mb-12 text-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 mb-3 sm:mb-4 animate-fade-in px-4">
-              Friends
-            </h1>
-            <p className="text-gray-300 text-base sm:text-lg px-4">Connect and compete with your friends</p>
-          </div>
-          {(friends.length > 0 || pending.length > 0) && (
-            <div className="mb-6 sm:mb-8 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-3xl mx-auto px-4">
-              <div className="bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/20">
-                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{friends.length}</div>
-                <div className="text-gray-300 text-xs sm:text-sm">Total Friends</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/20">
-                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{pending.length}</div>
-                <div className="text-gray-300 text-xs sm:text-sm">Pending Requests</div>
-              </div>
-            </div>
-          )}
-          <div className="max-w-5xl mx-auto px-4 space-y-8 sm:space-y-12">
-            <section>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">Your Friends</h2>
-              {friends.length === 0 ? (
-                <div className="text-center py-12 sm:py-16 max-w-md mx-auto">
-                  <div className="bg-white/10 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-8 sm:p-10 border border-white/20">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center">
-                      <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">No Friends Yet</h3>
-                    <p className="text-gray-300 text-sm sm:text-base">
-                      Start connecting with others to build your network
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  {friends.map((f, index) => {
-                    const other = getOtherUser(f);
-                    const gradient = gradients[index % gradients.length];
-                    return (
-                      <div key={f._id} className="group relative">
-                        <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity blur-xl -z-10"
-                            style={{ background: `linear-gradient(135deg, rgb(168 85 247), rgb(236 72 153))` }}></div>
-                        <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/20 hover:border-white/40 transition-all transform group-hover:-translate-y-1 overflow-hidden">
-                          <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${gradient}`}></div>
-                          <div className="flex items-center justify-between pt-2">
-                            <div className="flex items-center gap-3">
-                              <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-lg transform group-hover:scale-110 transition-transform`}>
-                                {other.username.charAt(0).toUpperCase()}
-                              </div>
-                              <div>
-                                <p className="font-semibold text-white text-lg">{other.username}</p>
-                                {other.profile_pic && (
-                                  <p className="text-xs text-gray-300 truncate max-w-[150px]">{other.profile_pic}</p>
-                                )}
-                              </div>
-                            </div>
-                            <button
-                              onClick={() => handleRemove(other._id)}
-                              className="px-4 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition-all transform hover:scale-105 active:scale-95 min-w-[90px]"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </section>
-            <section>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">Pending Requests</h2>
-              {pending.length === 0 ? (
-                <div className="text-center py-12 sm:py-16 max-w-md mx-auto">
-                  <div className="bg-white/10 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-8 sm:p-10 border border-white/20">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center">
-                      <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">No Pending Requests</h3>
-                    <p className="text-gray-300 text-sm sm:text-base">
-                      You have no friend requests
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                  {pending.map((r, index) => {
-                    const other = getOtherUser(r);
-                    const incoming = isIncoming(r);
-                    const gradient = gradients[(index + 2) % gradients.length];
-                    return (
-                      <div key={r._id} className="group relative">
-                        <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity blur-xl -z-10"
-                            style={{ background: `linear-gradient(135deg, rgb(168 85 247), rgb(236 72 153))` }}></div>
-                        <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/20 hover:border-white/40 transition-all transform group-hover:-translate-y-1 overflow-hidden">
-                          <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${gradient}`}></div>
-                          <div className="pt-2">
-                            <div className="flex items-center gap-3 mb-4">
-                              <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-lg transform group-hover:scale-110 transition-transform`}>
-                                {other.username.charAt(0).toUpperCase()}
-                              </div>
-                              <div>
-                                <p className="font-semibold text-white text-lg">{other.username}</p>
-                                <p className="text-sm text-gray-300">
-                                  {incoming ? "Sent you a request" : "Request sent"}
-                                </p>
-                              </div>
-                            </div>
-                            {incoming ? (
-                              <div className="flex gap-2">
-                                <button
-                                  onClick={() => handleAccept(r._id)}
-                                  className="flex-1 px-4 py-2 rounded-full bg-green-600 hover:bg-green-700 text-white text-sm font-semibold transition-all transform hover:scale-105 active:scale-95 min-w-[90px]"
-                                >
-                                  Accept
-                                </button>
-                                <button
-                                  onClick={() => handleRemove(other._id)}
-                                  className="flex-1 px-4 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition-all transform hover:scale-105 active:scale-95 min-w-[90px]"
-                                >
-                                  Decline
-                                </button>
-                              </div>
-                            ) : (
-                              <button
-                                onClick={() => handleRemove(other._id)}
-                                className="w-full px-4 py-2 rounded-full bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-semibold transition-all transform hover:scale-105 active:scale-95 min-w-[90px]"
-                              >
-                                Cancel
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </section>
-          </div>
-        </main>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-y-auto pt-10">
+    <>
+      <div className="fixed inset-0" style={opalBackdropStyle}></div>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/4 left-1/4 w-[28rem] h-[28rem] bg-amber-200/30 rounded-full blur-3xl animate-pulse"></div>
+        <div
+          className="absolute bottom-1/4 right-1/4 w-[28rem] h-[28rem] bg-rose-200/30 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-1/2 w-[30rem] h-[30rem] -translate-x-1/2 -translate-y-1/2 bg-sky-200/25 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "2s" }}
+        ></div>
       </div>
-      <main className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 min-h-full">
-        <div className="mb-8 sm:mb-12 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 mb-3 sm:mb-4 animate-fade-in px-4">
-            Friends
-          </h1>
-          <p className="text-gray-300 text-base sm:text-lg px-4">Connect and compete with your friends</p>
-        </div>
-        {(friends.length > 0 || pending.length > 0) && (
-          <div className="mb-6 sm:mb-8 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-3xl mx-auto px-4">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/20">
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{friends.length}</div>
-              <div className="text-gray-300 text-xs sm:text-sm">Total Friends</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/20">
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-white">{pending.length}</div>
-              <div className="text-gray-300 text-xs sm:text-sm">Pending Requests</div>
-            </div>
+      <div className="relative min-h-screen pt-16 sm:pt-20">
+        <main className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 min-h-full">
+          <div className="mb-9 sm:mb-12 text-center mt-0">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-slate-800 mb-3 sm:mb-4 select-none">
+              Friends
+            </h1>
+            <p className="text-slate-600 text-base sm:text-lg select-none">Connect and compete with your friends</p>
           </div>
-        )}
-        <div className="max-w-5xl mx-auto px-4 space-y-8 sm:space-y-12">
-          <section>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">Your Friends</h2>
-            {friends.length === 0 ? (
-              <div className="text-center py-12 sm:py-16 max-w-md mx-auto">
-                <div className="bg-white/10 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-8 sm:p-10 border border-white/20">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center">
-                    <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">No Friends Yet</h3>
-                  <p className="text-gray-300 text-sm sm:text-base">
-                    Start connecting with others to build your network
-                  </p>
+
+          <div className="space-y-6 sm:space-y-8">
+            <section className="bg-white/70 backdrop-blur-lg rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm">
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <h2 className="text-xl sm:text-2xl font-semibold text-slate-800">Pending Requests</h2>
+                <div className="flex gap-1 p-1 bg-slate-100 dark:bg-slate-800/40 rounded-full">
+                  <button
+                    onClick={() => setPendingSort("newest")}
+                    className={`sorting-button h-8 min-w-[70px] sm:min-w-[85px] px-3 rounded-full text-[10px] sm:text-xs font-semibold transition-all flex items-center justify-center ${pendingSort === "newest"
+                      ? "isActive bg-white dark:bg-slate-900 shadow-sm border border-slate-200/80 dark:border-slate-800/80 text-slate-900 dark:text-slate-100"
+                      : "bg-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
+                      }`}
+                  >
+                    Newest
+                  </button>
+                  <button
+                    onClick={() => setPendingSort("oldest")}
+                    className={`sorting-button h-8 min-w-[70px] sm:min-w-[85px] px-3 rounded-full text-[10px] sm:text-xs font-semibold transition-all flex items-center justify-center ${pendingSort === "oldest"
+                      ? "isActive bg-white dark:bg-slate-900 shadow-sm border border-slate-200/80 dark:border-slate-800/80 text-slate-900 dark:text-slate-100"
+                      : "bg-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
+                      }`}
+                  >
+                    Oldest
+                  </button>
                 </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                {friends.map((f, index) => {
-                  const other = getOtherUser(f);
-                  const gradient = gradients[index % gradients.length];
-                  return (
-                    <div key={f._id} className="group relative">
-                      <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity blur-xl -z-10"
-                            style={{ background: `linear-gradient(135deg, rgb(168 85 247), rgb(236 72 153))` }}></div>
-                      <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/20 hover:border-white/40 transition-all transform group-hover:-translate-y-1 overflow-hidden">
-                        <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${gradient}`}></div>
-                        <div className="flex items-center justify-between pt-2">
-                          <Link to={`/users/${other.username}`} className="flex items-center gap-3 flex-1 hover:opacity-80 transition-opacity">
-                            <div className={`w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-lg transform group-hover:scale-110 transition-transform border-2 border-white/20`}>
-                              {other.profile_pic ? (
-                                <img
-                                  src={other.profile_pic}
-                                  alt={other.username}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.target.style.display = 'none';
-                                    e.target.parentElement.innerHTML = `<span class="text-white font-bold text-lg">${other.username.charAt(0).toUpperCase()}</span>`;
+              <div className="divide-y divide-slate-200/80 dark:divide-slate-800/90 sm:divide-y-0 sm:divide-x sm:grid sm:grid-cols-2">
+                <div className="pb-5 sm:pb-0 sm:pr-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xs sm:text-sm font-semibold text-slate-600 uppercase tracking-wide">
+                      {incomingPending.length} received
+                    </h3>
+                  </div>
+                  {incomingPending.length === 0 ? (
+                    <div className="flex items-center gap-2 text-slate-400 text-xs sm:text-sm">
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>No received requests</span>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-3">
+                      {incomingPending.map((r) => {
+                        const other = getOtherUser(r);
+                        const gradient = getAvatarGradient(other?._id || other?.id || other?.user_id);
+                        return (
+                          <Link
+                            key={r._id}
+                            to={`/users/${other.user_data?.username}`}
+                            className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-lg rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-out hover:scale-[1.01] hover:shadow-[0_0_16px_-6px_rgba(148,163,184,0.4)] hover:border-slate-300/80 dark:hover:border-slate-700 block"
+                          >
+                            <div className="flex items-center justify-between gap-3">
+                              <div className="flex items-center gap-3 min-w-0 text-left">
+                                <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-[30%] overflow-hidden bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-semibold text-lg`}>
+                                  {other.user_data?.profile_pic ? (
+                                    <img
+                                      src={other.user_data.profile_pic}
+                                      alt={other.user_data.username}
+                                      className="w-full h-full object-cover"
+                                      onError={(e) => {
+                                        e.target.style.display = "none";
+                                        e.target.parentElement.innerHTML = `<span class="text-white font-semibold text-lg">${other.user_data.username.charAt(0).toUpperCase()}</span>`;
+                                      }}
+                                    />
+                                  ) : (
+                                    <span>{other.user_data?.username?.charAt(0).toUpperCase()}</span>
+                                  )}
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="font-semibold text-slate-800 dark:text-slate-100 text-base sm:text-lg truncate">{other.user_data?.username}</p>
+                                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Sent you a request</p>
+                                </div>
+                              </div>
+                              <div className="flex gap-2">
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleAccept(r._id);
                                   }}
-                                />
-                              ) : (
-                                <span>{other.username.charAt(0).toUpperCase()}</span>
-                              )}
-                            </div>
-                            <div>
-                              <p className="font-semibold text-white text-lg">{other.username}</p>
+                                  className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 hover:bg-emerald-200 dark:hover:bg-emerald-800/40 text-emerald-800 dark:text-emerald-400 text-xs sm:text-sm font-semibold transition-colors border border-emerald-200/50 dark:border-emerald-800/50"
+                                >
+                                  Accept
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleRemove(other._id);
+                                  }}
+                                  className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-rose-100 dark:bg-rose-900/40 hover:bg-rose-200 dark:hover:bg-rose-800/40 text-rose-800 dark:text-rose-400 text-xs sm:text-sm font-semibold transition-colors border border-rose-200/50 dark:border-rose-800/50"
+                                >
+                                  Decline
+                                </button>
+                              </div>
                             </div>
                           </Link>
-                          <button
-                            onClick={() => handleRemove(other._id)}
-                            className="px-4 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition-all transform hover:scale-105 active:scale-95 min-w-[90px]"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
-              </div>
-            )}
-          </section>
-          <section>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">Pending Requests</h2>
-            {pending.length === 0 ? (
-              <div className="text-center py-12 sm:py-16 max-w-md mx-auto">
-                <div className="bg-white/10 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-8 sm:p-10 border border-white/20">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full mx-auto mb-4 sm:mb-6 flex items-center justify-center">
-                    <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                  )}
+                </div>
+
+                <div className="pt-5 sm:pt-0 sm:pl-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xs sm:text-sm font-semibold text-slate-600 uppercase tracking-wide">
+                      {outgoingPending.length} sent
+                    </h3>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">No Pending Requests</h3>
-                  <p className="text-gray-300 text-sm sm:text-base">
-                    You have no friend requests
-                  </p>
+                  {outgoingPending.length === 0 ? (
+                    <div className="flex items-center gap-2 text-slate-400 text-xs sm:text-sm">
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>No sent requests</span>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-3">
+                      {outgoingPending.map((r) => {
+                        const other = getOtherUser(r);
+                        const gradient = getAvatarGradient(other?._id || other?.id || other?.user_id);
+                        return (
+                          <Link
+                            key={r._id}
+                            to={`/users/${other.user_data?.username}`}
+                            className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-lg rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-out hover:scale-[1.01] hover:shadow-[0_0_16px_-6px_rgba(148,163,184,0.4)] hover:border-slate-300/80 dark:hover:border-slate-700 block"
+                          >
+                            <div className="flex items-center justify-between gap-3">
+                              <div className="flex items-center gap-3 min-w-0 text-left">
+                                <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-[30%] overflow-hidden bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-semibold text-lg`}>
+                                  {other.user_data?.profile_pic ? (
+                                    <img
+                                      src={other.user_data.profile_pic}
+                                      alt={other.user_data.username}
+                                      className="w-full h-full object-cover"
+                                      onError={(e) => {
+                                        e.target.style.display = "none";
+                                        e.target.parentElement.innerHTML = `<span class="text-white font-semibold text-lg">${other.user_data.username.charAt(0).toUpperCase()}</span>`;
+                                      }}
+                                    />
+                                  ) : (
+                                    <span>{other.user_data?.username?.charAt(0).toUpperCase()}</span>
+                                  )}
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="font-semibold text-slate-800 dark:text-slate-100 text-base sm:text-lg truncate">{other.user_data?.username}</p>
+                                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Request sent</p>
+                                </div>
+                              </div>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleRemove(other._id);
+                                }}
+                                className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-amber-100 dark:bg-amber-900/40 hover:bg-amber-200 dark:hover:bg-amber-800/40 text-amber-800 dark:text-amber-400 text-xs sm:text-sm font-semibold transition-colors border border-amber-200/50 dark:border-amber-800/50"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                {pending.map((r, index) => {
-                  const other = getOtherUser(r);
-                  const incoming = isIncoming(r);
-                  const gradient = gradients[(index + 2) % gradients.length];
-                  return (
-                    <div key={r._id} className="group relative">
-                      <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity blur-xl -z-10"
-                            style={{ background: `linear-gradient(135deg, rgb(168 85 247), rgb(236 72 153))` }}></div>
-                      <div className="relative bg-white/10 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/20 hover:border-white/40 transition-all transform group-hover:-translate-y-1 overflow-hidden">
-                        <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${gradient}`}></div>
-                        <div className="pt-2">
-                          <Link to={`/users/${other.username}`} className="flex items-center gap-3 mb-4 hover:opacity-80 transition-opacity">
-                            <div className={`w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-lg transform group-hover:scale-110 transition-transform border-2 border-white/20`}>
-                              {other.profile_pic ? (
-                                <img
-                                  src={other.profile_pic}
-                                  alt={other.username}
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    e.target.style.display = 'none';
-                                    e.target.parentElement.innerHTML = `<span class="text-white font-bold text-lg">${other.username.charAt(0).toUpperCase()}</span>`;
-                                  }}
-                                />
-                              ) : (
-                                <span>{other.username.charAt(0).toUpperCase()}</span>
-                              )}
-                            </div>
-                            <div>
-                              <p className="font-semibold text-white text-lg">{other.username}</p>
-                              <p className="text-sm text-gray-300">
-                                {incoming ? "Sent you a request" : "Request sent"}
+            </section>
+
+            <section className="bg-white/70 backdrop-blur-lg rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm">
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <h2 className="text-xl sm:text-2xl font-semibold text-slate-800">Your Friends</h2>
+                <div className="flex items-center gap-2">
+                  <div className="shrink-0 rounded-full border border-slate-200/80 bg-white/60 px-3 py-1 text-xs sm:text-sm font-semibold text-slate-600">
+                    {friends.length} total
+                  </div>
+                  <div className="flex gap-1 p-1 bg-slate-100 dark:bg-slate-800/40 rounded-full">
+                    <button
+                      onClick={() => setFriendsSort("newest")}
+                      className={`sorting-button h-8 min-w-[70px] sm:min-w-[85px] px-3 rounded-full text-[10px] sm:text-xs font-semibold transition-all flex items-center justify-center ${friendsSort === "newest"
+                        ? "isActive bg-white dark:bg-slate-900 shadow-sm border border-slate-200/80 dark:border-slate-800/80 text-slate-900 dark:text-slate-100"
+                        : "bg-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
+                        }`}
+                    >
+                      Newest
+                    </button>
+                    <button
+                      onClick={() => setFriendsSort("oldest")}
+                      className={`sorting-button h-8 min-w-[70px] sm:min-w-[85px] px-3 rounded-full text-[10px] sm:text-xs font-semibold transition-all flex items-center justify-center ${friendsSort === "oldest"
+                        ? "isActive bg-white dark:bg-slate-900 shadow-sm border border-slate-200/80 dark:border-slate-800/80 text-slate-900 dark:text-slate-100"
+                        : "bg-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300"
+                        }`}
+                    >
+                      Oldest
+                    </button>
+                  </div>
+                </div>
+              </div>
+              {friends.length === 0 ? (
+                <div className="text-center py-8 sm:py-10 max-w-md mx-auto">
+                  <div className="bg-white/60 rounded-2xl p-6 sm:p-8 border border-slate-200/80">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-amber-400 to-rose-400 rounded-full mx-auto mb-4 flex items-center justify-center">
+                      <svg className="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-semibold text-slate-800 mb-2">No Friends Yet</h3>
+                    <p className="text-slate-600 text-sm sm:text-base">
+                      Start connecting with others to build your network
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  {sortedFriends.map((f) => {
+                    const other = getOtherUser(f);
+                    const gradient = getAvatarGradient(other?._id || other?.id || other?.user_id);
+                    return (
+                      <Link
+                        key={f._id}
+                        to={`/users/${other.user_data?.username}`}
+                        className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-lg rounded-2xl p-4 sm:p-5 border border-slate-200/80 dark:border-slate-800 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-out hover:scale-[1.01] hover:shadow-[0_0_16px_-6px_rgba(148,163,184,0.4)] hover:border-slate-300/80 dark:hover:border-slate-700 block"
+                      >
+                        {confirmRemoveId === f._id ? (
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 w-full">
+                            <div className="min-w-0 text-left">
+                              <p className="font-semibold text-slate-800 dark:text-slate-100 text-base sm:text-lg">
+                                Remove {other.user_data?.username}?
+                              </p>
+                              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                                This will remove them from your friends list.
                               </p>
                             </div>
-                          </Link>
-                          {incoming ? (
                             <div className="flex gap-2">
                               <button
-                                onClick={() => handleAccept(r._id)}
-                                className="flex-1 px-4 py-2 rounded-full bg-green-600 hover:bg-green-700 text-white text-sm font-semibold transition-all transform hover:scale-105 active:scale-95 min-w-[90px]"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setConfirmRemoveId(null);
+                                }}
+                                className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs sm:text-sm font-semibold transition-colors"
                               >
-                                Accept
+                                Cancel
                               </button>
                               <button
-                                onClick={() => handleRemove(other._id)}
-                                className="flex-1 px-4 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition-all transform hover:scale-105 active:scale-95 min-w-[90px]"
+                                onClick={async (e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  try {
+                                    await handleRemove(other._id);
+                                  } finally {
+                                    setConfirmRemoveId(null);
+                                  }
+                                }}
+                                className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-rose-100 dark:bg-rose-900/40 hover:bg-rose-200 dark:hover:bg-rose-800/40 text-rose-800 dark:text-rose-400 text-xs sm:text-sm font-semibold transition-colors border border-rose-200/50 dark:border-rose-800/50"
                               >
-                                Decline
+                                Confirm
                               </button>
                             </div>
-                          ) : (
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-between gap-3 w-full">
+                            <div className="flex items-center gap-3 min-w-0 text-left">
+                              <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-[30%] overflow-hidden bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-semibold text-lg`}>
+                                {other.user_data?.profile_pic ? (
+                                  <img
+                                    src={other.user_data.profile_pic}
+                                    alt={other.user_data.username}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      e.target.style.display = "none";
+                                      e.target.parentElement.innerHTML = `<span class="text-white font-semibold text-lg">${other.user_data.username.charAt(0).toUpperCase()}</span>`;
+                                    }}
+                                  />
+                                ) : (
+                                  <span>{other.user_data?.username?.charAt(0).toUpperCase()}</span>
+                                )}
+                              </div>
+                              <div className="min-w-0">
+                                <p className="font-semibold text-slate-800 dark:text-slate-100 text-base sm:text-lg truncate">{other.user_data?.username}</p>
+                                {other.user_data?.created_at && (
+                                  <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                                    Since {new Date(other.user_data.created_at).toLocaleDateString("en-GB", {
+                                      day: "numeric",
+                                      month: "short",
+                                      year: "numeric"
+                                    })}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
                             <button
-                              onClick={() => handleRemove(other._id)}
-                              className="w-full px-4 py-2 rounded-full bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-semibold transition-all transform hover:scale-105 active:scale-95 min-w-[90px]"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setConfirmRemoveId(f._id);
+                              }}
+                              className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-rose-100 dark:bg-rose-900/40 hover:bg-rose-200 dark:hover:bg-rose-800/40 text-rose-800 dark:text-rose-400 text-xs sm:text-sm font-semibold transition-colors border border-rose-200/50 dark:border-rose-800/50"
                             >
-                              Cancel
+                              Remove
                             </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </section>
-        </div>
-      </main>
-    </div>
+                          </div>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </section>
+          </div>
+        </main >
+      </div >
+    </>
   );
 }

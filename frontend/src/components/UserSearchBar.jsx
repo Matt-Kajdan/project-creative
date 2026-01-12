@@ -104,15 +104,6 @@ export default function UserSearchBar({ excludeUsername }) {
                 onClick={() => selectUser(u.username)}
                 className="w-full text-left px-4 py-5 text-sm text-slate-800 dark:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-900/60 flex items-center gap-3"
               >
-                {u.profile_pic ? (
-                  <img
-                    src={u.profile_pic}
-                    alt=""
-                    className="h-7 w-7 rounded-xl object-cover"
-                  />
-                ) : (
-                  <div className="h-7 w-7 rounded-xl bg-gradient-to-br from-amber-400 to-rose-400" />
-                )}
                 <span>{u.username}</span>
               </button>
             ))}

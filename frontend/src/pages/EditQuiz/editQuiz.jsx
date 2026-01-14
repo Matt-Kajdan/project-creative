@@ -69,6 +69,7 @@ function shouldResetAttempts(originalQuiz, updatedData) {
 
 export default function EditQuiz() {
   const isMobile = useIsMobile();
+  const keyboardHeight = useKeyboardHeight();
   const ANSWER_COUNT_OPTIONS = useMemo(() => [2, 3, 4, 5, 6], []);
   const DEFAULT_ANSWERS_PER_QUESTION = 4;
   const { id } = useParams();
@@ -816,7 +817,7 @@ export default function EditQuiz() {
                 </div>
               </div>
             </div>
-            <div className="space-y-6">
+            <div className="space-y-6 pb-16 sm:pb-0">
               {questions.map((q, qIndex) => {
                 return (
                   <div
@@ -853,7 +854,7 @@ export default function EditQuiz() {
                             <button
                               type="button"
                               onClick={() => removeQuestion(qIndex)}
-                              className="h-[46px] w-[46px] rounded-xl border border-rose-200 dark:border-none bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-400 hover:bg-rose-200 dark:hover:bg-rose-800/60 dark:hover:text-white transition-colors flex items-center justify-center"
+                              className="h-[46px] w-[46px] shrink-0 rounded-xl border border-rose-200 dark:border-none bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-400 hover:bg-rose-200 dark:hover:bg-rose-800/60 dark:hover:text-white transition-colors flex items-center justify-center"
                               title="Remove question"
                             >
                               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

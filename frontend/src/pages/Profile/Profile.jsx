@@ -1,4 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../services/firebase";
@@ -42,6 +43,10 @@ export default function ProfilePage() {
   const [sortDirection, setSortDirection] = useState("desc");
   const [takenSortBy, setTakenSortBy] = useState("highest_score");
   const [takenSortDirection, setTakenSortDirection] = useState("desc");
+  const [showRemoveFriendConfirm, setShowRemoveFriendConfirm] = useState(false);
+  const [removeFriendModalPos, setRemoveFriendModalPos] = useState({ top: 0, left: 0 });
+  const removeFriendButtonRef = useRef(null);
+  const removeFriendModalRef = useRef(null);
   const avatarGradients = [
     "from-rose-300 to-pink-400 dark:from-rose-500/80 dark:to-pink-600/80",
     "from-sky-300 to-blue-400 dark:from-sky-500/80 dark:to-blue-600/80",
@@ -70,6 +75,21 @@ export default function ProfilePage() {
     });
     return unsub;
   }, []);
+
+  useEffect(() => {
+    if (!showRemoveFriendConfirm) return;
+    function handleClickOutside(event) {
+      if (
+        removeFriendButtonRef.current?.contains(event.target) ||
+        removeFriendModalRef.current?.contains(event.target)
+      ) {
+        return;
+      }
+      setShowRemoveFriendConfirm(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showRemoveFriendConfirm]);
 
   useEffect(() => {
     let mounted = true;
@@ -280,6 +300,14 @@ export default function ProfilePage() {
       await loadFriendState();
     } catch (err) {
       alert("Could not remove: " + (err.message || err));
+    }
+  }
+
+  async function handleConfirmRemoveFriend() {
+    try {
+      await handleRemove();
+    } finally {
+      setShowRemoveFriendConfirm(false);
     }
   }
 
@@ -714,16 +742,43 @@ export default function ProfilePage() {
                           </a>
                         )
                       ) : friendsLoading ? (
-                        <button disabled className="px-6 py-2.5 rounded-xl bg-white/70 text-slate-600 font-semibold border border-slate-200/80">Loading...</button>
+                        <button disabled className="px-4 py-2 text-sm rounded-xl bg-white/70 text-slate-600 font-semibold border border-slate-200/80">Loading...</button>
                       ) : isFriend ? (
                         <div className="flex items-center gap-3">
-                          <span className="px-4 py-2 text-sm rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-semibold border border-emerald-200/50 dark:border-emerald-800/50 flex items-center gap-2">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            </svg>
-                            Friends
-                          </span>
-                          <button onClick={handleRemove} className="px-4 py-2 text-sm rounded-xl bg-rose-100 dark:bg-rose-900/40 hover:bg-rose-200 dark:hover:bg-rose-800/40 text-rose-700 dark:text-rose-400 font-semibold transition-colors border border-rose-200/50 dark:border-rose-800/50">Remove</button>
+                          <div className="relative">
+                            <button
+                              type="button"
+                              aria-label="Remove friend"
+                              ref={removeFriendButtonRef}
+                              onClick={() => {
+                                setShowRemoveFriendConfirm((prev) => {
+                                  const next = !prev;
+                                  if (next && removeFriendButtonRef.current) {
+                                    const rect = removeFriendButtonRef.current.getBoundingClientRect();
+                                    setRemoveFriendModalPos({
+                                      top: rect.bottom + 8,
+                                      left: rect.left
+                                    });
+                                  }
+                                  return next;
+                                });
+                              }}
+                              className="group w-[128px] px-4 py-2 text-sm rounded-xl bg-slate-100 text-slate-700 font-semibold border border-slate-200/80 shadow-sm transition-colors hover:bg-slate-200/70 dark:bg-blue-950/60 dark:text-white dark:border-blue-400/30 dark:hover:bg-blue-900/60 flex items-center justify-center"
+                            >
+                              <span className="flex items-center gap-2 transition-opacity group-hover:opacity-0">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                                Friends
+                              </span>
+                              <span className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Remove
+                              </span>
+                            </button>
+                          </div>
                         </div>
                       ) : pendingSent ? (
                         <div className="flex items-center gap-3">
@@ -746,6 +801,33 @@ export default function ProfilePage() {
                     </div>
                   )}
                 </div>
+
+                {showRemoveFriendConfirm && createPortal(
+                  <div
+                    ref={removeFriendModalRef}
+                    className="fixed z-[9999] w-[240px] rounded-2xl border border-slate-200/80 bg-white/90 p-4 shadow-lg backdrop-blur-lg dark:border-slate-700/60 dark:bg-slate-900/90"
+                    style={{ top: removeFriendModalPos.top, left: removeFriendModalPos.left }}
+                  >
+                    <div className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-3">Remove friend?</div>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={handleConfirmRemoveFriend}
+                        className="flex-1 px-4 py-2 text-sm rounded-xl bg-rose-100 dark:bg-rose-900/40 hover:bg-rose-200 dark:hover:bg-rose-800/40 text-rose-700 dark:text-rose-400 font-semibold transition-colors border border-rose-200/50 dark:border-rose-800/50"
+                      >
+                        Remove
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowRemoveFriendConfirm(false)}
+                        className="flex-1 px-4 py-2 text-sm rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold transition-colors border border-slate-200/80 dark:border-slate-700"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>,
+                  document.body
+                )}
 
                 <div className="w-full sm:w-[32rem] mt-4 sm:mt-0 sm:ml-6">
                   <div className="grid grid-cols-2 gap-x-4 gap-y-1 p-4">

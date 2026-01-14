@@ -735,17 +735,17 @@ export default function ProfilePage() {
             </div>
           </div>
           {isAccountLocked && (
-            <div className="mb-6 sm:mb-8 bg-amber-100/70 border border-amber-200/80 rounded-3xl p-6 sm:p-8 backdrop-blur-lg shadow-sm">
+            <div className="mb-6 sm:mb-8 bg-amber-100/70 border border-amber-200/80 rounded-3xl p-6 sm:p-8 backdrop-blur-lg shadow-sm dark:bg-amber-900/40 dark:border-amber-800/60">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-semibold text-amber-800 mb-2">
+                  <h2 className="text-xl sm:text-2xl font-semibold text-amber-800 mb-2 dark:text-amber-200">
                     Account scheduled for deletion
                   </h2>
-                  <p className="text-amber-700 mb-2">
+                  <p className="text-amber-700 mb-2 dark:text-amber-200/90">
                     Deletion in {remainingLabel}. {deletionModeLabel}
                   </p>
                   {deletionInfo?.scheduled_for && (
-                    <p className="text-amber-700/80 text-sm">
+                    <p className="text-amber-700/80 text-sm dark:text-amber-200/70">
                       Scheduled for {new Date(deletionInfo.scheduled_for).toLocaleString("en-GB", {
                         day: "numeric",
                         month: "short",
@@ -756,7 +756,7 @@ export default function ProfilePage() {
                     </p>
                   )}
                   {deletionActionError && (
-                    <p className="text-rose-700 mt-3">{deletionActionError}</p>
+                    <p className="text-rose-700 mt-3 dark:text-rose-200">{deletionActionError}</p>
                   )}
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3">
@@ -764,7 +764,7 @@ export default function ProfilePage() {
                     type="button"
                     onClick={handleCancelDeletion}
                     disabled={deletionActionLoading}
-                    className="px-5 py-2.5 rounded-xl bg-white/80 text-slate-700 font-semibold border border-amber-200/80 hover:bg-white transition-colors disabled:opacity-50"
+                    className="px-5 py-2.5 rounded-xl bg-white/80 text-slate-700 font-semibold border border-amber-200/80 hover:bg-white transition-colors disabled:opacity-50 dark:bg-amber-950/40 dark:text-amber-100 dark:border-amber-800/60 dark:hover:bg-amber-900/50"
                   >
                     {deletionActionLoading ? "Working..." : "Cancel Deletion"}
                   </button>
@@ -772,7 +772,7 @@ export default function ProfilePage() {
                     type="button"
                     onClick={handleDeleteNow}
                     disabled={deletionActionLoading}
-                    className="px-5 py-2.5 rounded-xl bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-colors disabled:opacity-50"
+                    className="px-5 py-2.5 rounded-xl bg-rose-500 text-white font-semibold hover:bg-rose-600 transition-colors disabled:opacity-50 dark:bg-rose-600 dark:hover:bg-rose-500"
                   >
                     Delete Now
                   </button>

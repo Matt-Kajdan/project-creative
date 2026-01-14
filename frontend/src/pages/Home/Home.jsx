@@ -3,8 +3,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getQuizzes } from "../../services/quizzes";
 import { toggleFavourite } from "../../services/favourites";
 import { useUser } from "../../hooks/useUser";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 export function Home() {
+  const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true)
   const [quizzes, setQuizzes] = useState([])
   const { favouriteIds, setFavouriteIds } = useUser();
@@ -216,6 +218,7 @@ export function Home() {
     return () => document.removeEventListener('click', handleOutsideClick);
   }, []);
   const handleLogoMouseMove = (event) => {
+    if (isMobile) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const x = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
     const y = Math.min(100, Math.max(0, ((event.clientY - rect.top) / rect.height) * 100));
@@ -256,11 +259,11 @@ export function Home() {
         ></div>
       </div>
       <div className="relative min-h-screen">
-        <main className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-8 sm:pb-12">
-          <div className="mb-8 sm:mb-12 text-center mt-4 sm:mt-6">
+        <main className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-20 pb-16 sm:pb-12">
+          <div className="mb-8 sm:mb-12 text-center mt-10 sm:mt-6">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold mb-3 sm:mb-4 animate-fade-in px-4">
               <span
-                className="relative inline-block group select-none"
+                className={`relative inline-block ${!isMobile ? "group" : ""} select-none`}
                 onMouseMove={handleLogoMouseMove}
                 onMouseLeave={handleLogoMouseLeave}
                 style={{
@@ -312,16 +315,16 @@ export function Home() {
             <p className="text-slate-600 text-base sm:text-lg px-4">Challenge yourself and expand your knowledge</p>
           </div>
           {quizzes.length > 0 && (
-            <div className="mb-6 sm:mb-8 max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 [padding-left:calc(1rem+var(--removed-body-scroll-width,0px))] [padding-right:calc(1rem+var(--removed-body-scroll-width,0px))]">
-              <div className="flex items-center gap-4 w-full sm:w-auto">
+            <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 sm:gap-6 w-full">
+              <div className="flex flex-wrap sm:flex-nowrap items-center justify-center gap-4 w-full sm:w-auto">
                 {/* Total Quizzes Card */}
-                <div className="total-quizzes-card bg-white/70 backdrop-blur-lg rounded-xl sm:rounded-2xl px-4 border border-slate-200/80 flex flex-col justify-center min-w-[160px] h-[72px] flex-1 sm:flex-none cursor-default focus:outline-none">
+                <div className="total-quizzes-card bg-white/70 backdrop-blur-lg rounded-xl sm:rounded-2xl px-4 border border-slate-200/80 flex flex-col justify-center min-w-[130px] h-[72px] flex-1 sm:flex-none sm:shrink-0 cursor-default focus:outline-none">
                   <div className="text-xl sm:text-2xl font-bold text-slate-900">{filteredQuizzes.length}</div>
                   <div className="text-slate-500 text-xs sm:text-sm whitespace-nowrap">{countLabel}</div>
                 </div>
 
                 {/* Category filter drop down */}
-                <div className="relative flex-1 sm:w-64">
+                <div className="relative flex-1 sm:flex-none sm:w-72 min-w-[170px]">
                   <button
                     type="button"
                     aria-haspopup="true"
@@ -370,11 +373,11 @@ export function Home() {
 
               {/* Sorting Bar */}
               {/* Sorting Bar Wrapper */}
-              <div className="relative w-full sm:w-auto h-[72px] group/sort-wrapper bg-white/70 dark:bg-slate-800/40 backdrop-blur-lg rounded-2xl border border-slate-200/80 dark:border-slate-800/60 overflow-hidden">
-                <div className="sorting-bar-container flex items-center gap-1.5 p-1 h-full w-full sm:w-auto overflow-x-auto no-scrollbar relative">
+              <div className="relative w-full sm:flex-1 h-[72px] group/sort-wrapper bg-white/70 dark:bg-slate-800/40 backdrop-blur-lg rounded-2xl border border-slate-200/80 dark:border-slate-800/60 overflow-hidden">
+                <div className="sorting-bar-container flex items-center gap-1.5 p-1 h-full w-full overflow-x-auto sm:overflow-x-visible overflow-y-hidden no-scrollbar relative">
                   {[
                     { id: 'newest', label: 'Date', options: { desc: 'Newest', asc: 'Oldest' }, width: 'w-[120px]' },
-                    { id: 'stars', label: 'Stars', width: 'w-[100px]' },
+                    { id: 'stars', label: 'Likes', width: 'w-[100px]' },
                     { id: 'questions', label: 'Questions', width: 'w-[140px]' },
                     { id: 'difficulty', label: 'Difficulty', width: 'w-[130px]' }
                   ].map((option) => {
@@ -391,15 +394,15 @@ export function Home() {
                             setSortDirection("desc");
                           }
                         }}
-                        className={`sorting-button h-full ${option.width} px-4 rounded-xl text-sm font-semibold flex flex-col sm:flex-row items-center justify-center relative transition-[background-color,color,transform,shadow] duration-200 [outline:none] [box-shadow:none] [ring:none] [-webkit-tap-highlight-color:transparent] ${isActive ? 'bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 shadow-sm border border-slate-200/50 dark:border-slate-700/50 isActive' : 'text-slate-900 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 border border-transparent hover:bg-slate-200/50 dark:hover:bg-transparent'}`}
+                        className={`sorting-button h-full ${option.width} sm:flex-1 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 shrink-0 sm:shrink transition-[background-color,color,transform,shadow] duration-200 [outline:none] [box-shadow:none] [ring:none] [-webkit-tap-highlight-color:transparent] ${isActive ? 'bg-white/90 dark:bg-slate-700/90 text-slate-900 dark:text-slate-100 shadow-sm border border-slate-200/50 dark:border-slate-700/50 isActive' : 'text-slate-900 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 border border-transparent hover:bg-slate-200/50 dark:hover:bg-transparent'}`}
                       >
-                        <span className="truncate">
+                        <span className="truncate leading-none">
                           {option.id === 'newest'
                             ? (isActive ? option.options[sortDirection] : 'Date')
                             : option.label}
                         </span>
                         {isActive && (
-                          <span className="mt-1 sm:mt-0 sm:absolute sm:right-2 flex items-center justify-center w-4">
+                          <span className="flex items-center justify-center shrink-0">
                             {isAsc ? (
                               <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M10 5l4 6H6l4-6z" />
@@ -441,7 +444,7 @@ export function Home() {
             </div>
           )}
           {quizzes.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 px-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredQuizzes.map((quiz) => {
                 const gradient = categoryGradients[quiz.category] || categoryGradients.other;
                 const categoryLabel = quiz.category || "other";
@@ -470,7 +473,7 @@ export function Home() {
                     onTouchEnd={handleCardTouchEnd}
                   >
                     <div
-                      className="relative z-10 bg-white/70 dark:bg-slate-800/80backdrop-blur-lg rounded-2xl sm:rounded-3xl pt-4 px-5 pb-1.5 sm:pt-5 sm:px-6 sm:pb-2 border border-slate-200/80 hover:border-slate-300 transition-all transform group-hover:scale-[1.012] group-hover:[box-shadow:0_10px_26px_-18px_rgb(var(--shadow-color)/0.42),0_0_18px_-10px_rgb(var(--shadow-color)/0.32)] overflow-hidden h-[200px] flex flex-col"
+                      className="relative z-10 bg-white/70 dark:bg-slate-800/80backdrop-blur-lg rounded-2xl sm:rounded-3xl pt-4 px-4 pb-1.5 sm:pt-5 sm:px-6 sm:pb-2 border border-slate-200/80 hover:border-slate-300 transition-all transform group-hover:scale-[1.012] group-hover:[box-shadow:0_10px_26px_-18px_rgb(var(--shadow-color)/0.42),0_0_18px_-10px_rgb(var(--shadow-color)/0.32)] overflow-hidden h-[200px] flex flex-col"
                       style={{ "--shadow-color": gradient.hover.primary }}
                     >
                       <div

@@ -8,8 +8,10 @@ import { getPendingRequests, sendFriendRequest, getFriends, removeRequest, accep
 import { removeFavourite, toggleFavourite } from "../../services/favourites";
 import { QuizStats } from '../../components/quizStats'
 import { useUser } from "../../hooks/useUser";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 export default function ProfilePage() {
+  const isMobile = useIsMobile();
   const { username: routeUsername } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -662,7 +664,7 @@ export default function ProfilePage() {
         <div className="absolute top-1/2 left-1/2 w-[30rem] h-[30rem] -translate-x-1/2 -translate-y-1/2 bg-sky-200/25 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
       <div className="relative min-h-screen pt-16 sm:pt-20">
-        <main className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 min-h-full">
+        <main className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 sm:py-12 min-h-full">
           <div className="mb-6 sm:mb-8">
             <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 relative overflow-hidden shadow-sm">
               <div className="flex flex-col sm:flex-row items-center gap-6">
@@ -834,52 +836,52 @@ export default function ProfilePage() {
           <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mb-6 sm:mb-8 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
               <h2 className="text-2xl sm:text-3xl font-semibold text-slate-800">Quizzes created</h2>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 dark:bg-slate-800/40 rounded-2xl border border-slate-200/80 dark:border-slate-800/60 h-[38px]">
-                  {['date', 'stars'].map((option) => {
-                    const isActive = sortBy === option;
-                    const isAsc = isActive && sortDirection === "asc";
-                    return (
-                      <button
-                        key={option}
-                        disabled={isAccountLocked}
-                        onClick={() => {
-                          if (isActive) {
-                            setSortDirection(prev => prev === "desc" ? "asc" : "desc");
-                          } else {
-                            setSortBy(option);
-                            setSortDirection("desc");
-                          }
-                        }}
-                        className={`sorting-button ${isActive ? 'isActive' : ''} w-20 py-1.5 rounded-xl text-xs font-semibold transition-all outline-none focus:outline-none focus:ring-0 active:scale-95 select-none flex items-center justify-center gap-1 ${isAccountLocked
-                          ? "opacity-50 text-slate-400"
-                          : isActive
-                            ? 'bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-slate-100 shadow-sm border border-slate-300 dark:border-slate-500'
-                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
-                          }`}
-                        style={{ WebkitTapHighlightColor: 'transparent' }}
-                      >
-                        {option === 'date' ? (isAsc ? 'Oldest' : 'Newest') : 'Stars'}
-                        <span className="inline-flex w-3 justify-center">
-                          {isActive ? (
-                            isAsc ? (
-                              <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M10 5l4 6H6l4-6z" />
-                              </svg>
-                            ) : (
-                              <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M10 15l-4-6h8l-4 6z" />
-                              </svg>
-                            )
-                          ) : (
-                            <span className="h-3 w-3" />
+              <div className="flex flex-nowrap items-center justify-center sm:justify-end gap-3 w-full sm:w-auto">
+                <div className="relative w-fit max-w-[calc(100%-80px)] sm:max-w-none sm:w-auto min-w-0 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800/60 bg-slate-100/80 dark:bg-slate-800/40 h-[40px]">
+                  <div className="flex items-center gap-1.5 p-1 h-full overflow-x-auto overflow-y-hidden no-scrollbar">
+                    {['date', 'stars'].map((option) => {
+                      const isActive = sortBy === option;
+                      const isAsc = isActive && sortDirection === "asc";
+                      return (
+                        <button
+                          key={option}
+                          disabled={isAccountLocked}
+                          onClick={() => {
+                            if (isActive) {
+                              setSortDirection(prev => prev === "desc" ? "asc" : "desc");
+                            } else {
+                              setSortBy(option);
+                              setSortDirection("desc");
+                            }
+                          }}
+                          className={`sorting-button ${isActive ? 'isActive' : ''} w-20 py-1.5 rounded-xl text-xs font-semibold transition-all outline-none focus:outline-none focus:ring-0 active:scale-95 select-none flex items-center justify-center gap-1.5 shrink-0 ${isAccountLocked
+                            ? "opacity-50 text-slate-400"
+                            : isActive
+                              ? 'bg-slate-200 dark:bg-slate-600 text-slate-800 dark:text-slate-100 shadow-sm border border-slate-300 dark:border-slate-500'
+                              : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                            }`}
+                          style={{ WebkitTapHighlightColor: 'transparent' }}
+                        >
+                          <span className="leading-none">{option === 'date' ? (isAsc ? 'Oldest' : 'Newest') : 'Likes'}</span>
+                          {isActive && (
+                            <span className="flex items-center justify-center shrink-0">
+                              {isAsc ? (
+                                <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                  <path d="M10 5l4 6H6l4-6z" />
+                                </svg>
+                              ) : (
+                                <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                  <path d="M10 15l-4-6h8l-4 6z" />
+                                </svg>
+                              )}
+                            </span>
                           )}
-                        </span>
-                      </button>
-                    );
-                  })}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div className={`px-4 py-2.5 rounded-2xl border flex items-center h-[38px] cursor-default ${isAccountLocked ? 'bg-slate-50/80 border-slate-200/60 dark:bg-slate-900/40 dark:border-slate-800/40' : 'bg-slate-100/80 border-slate-200/80 dark:bg-slate-800/50 dark:border-slate-700/50'}`}>
+                <div className={`px-4 py-2.5 rounded-2xl border flex items-center h-[40px] cursor-default shrink-0 ${isAccountLocked ? 'bg-slate-50/80 border-slate-200/60 dark:bg-slate-900/40 dark:border-slate-800/40' : 'bg-slate-100/80 border-slate-200/80 dark:bg-slate-800/50 dark:border-slate-700/50'}`}>
                   <span className={`font-semibold text-xs whitespace-nowrap leading-none ${isAccountLocked ? 'text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-200'}`}>
                     {createdQuizzes.length} quiz{createdQuizzes.length !== 1 ? 'zes' : ''}
                   </span>
@@ -952,16 +954,16 @@ export default function ProfilePage() {
                           if (isAccountLocked) return;
                           navigate(`/quiz/${quiz._id}`, { state: { returnTo } });
                         }}
-                        onMouseMove={isAccountLocked ? undefined : handleCardMouseMove}
-                        onMouseLeave={isAccountLocked ? undefined : handleCardMouseLeave}
-                        className={`group relative bg-white/80 backdrop-blur rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transform transition-all duration-300 ease-out ${isAccountLocked
+                        onMouseMove={isAccountLocked || isMobile ? undefined : handleCardMouseMove}
+                        onMouseLeave={isAccountLocked || isMobile ? undefined : handleCardMouseLeave}
+                        className={`${!isMobile ? "group" : ""} relative bg-white/80 backdrop-blur rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transform transition-all duration-300 ease-out ${isAccountLocked
                           ? "opacity-60"
-                          : "hover:border-slate-300 hover:bg-white hover:scale-[1.012] cursor-pointer"
+                          : !isMobile ? "hover:border-slate-300 hover:bg-white hover:scale-[1.012] cursor-pointer" : "cursor-pointer"
                           }`}
                         style={{ "--shadow-color": (categoryGradients[quiz.category] || categoryGradients.other).hover.primary }}
                       >
                         <div
-                          className={`pointer-events-none absolute inset-0 transition-opacity blur-2xl ${isAccountLocked ? "opacity-0" : "opacity-0 group-hover:opacity-45"}`}
+                          className={`pointer-events-none absolute inset-0 transition-opacity blur-2xl ${isAccountLocked || isMobile ? "opacity-0" : "opacity-0 group-hover:opacity-45"}`}
                           style={{
                             background: `
                             radial-gradient(300px 220px at var(--hover-x, 50%) 110%, rgb(${(categoryGradients[quiz.category] || categoryGradients.other).hover.primary} / 0.4), transparent 70%),
@@ -1353,69 +1355,81 @@ export default function ProfilePage() {
               )}
             </div>
           )}
-          <div className="w-full">
-            <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mb-6 sm:mb-8 shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-                <h2 className="text-2xl sm:text-3xl font-semibold text-slate-800">Quizzes Taken</h2>
-                <div className="flex items-center gap-3 w-full sm:w-auto overflow-hidden">
-                  <div className="relative flex-1 sm:flex-none bg-slate-100/80 dark:bg-slate-800/40 rounded-2xl border border-slate-200/80 dark:border-slate-800/60 overflow-hidden group/taken-sort">
-                    <div className="flex items-center gap-1.5 p-1 h-[42px] overflow-x-auto no-scrollbar relative w-full">
-                      {['highest_score', 'category', 'difficulty', 'questions', 'taken_on'].map((option) => {
-                        const isActive = takenSortBy === option;
-                        const isAsc = isActive && takenSortDirection === "asc";
-                        return (
-                          <button
-                            key={option}
-                            disabled={isAccountLocked}
-                            onClick={() => {
-                              if (isActive) {
-                                setTakenSortDirection(prev => prev === "desc" ? "asc" : "desc");
-                              } else {
-                                setTakenSortBy(option);
-                                setTakenSortDirection("desc");
-                              }
-                            }}
-                            className={`sorting-button ${isActive ? 'isActive' : ''} min-w-[80px] sm:w-20 py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold transition-all outline-none focus:outline-none focus:ring-0 active:scale-95 select-none flex items-center justify-center gap-1 shrink-0 ${isAccountLocked
-                              ? "opacity-50 text-slate-400"
-                              : isActive
-                                ? 'bg-white dark:bg-slate-600 text-slate-800 dark:text-slate-100 shadow-sm border border-slate-200/80 dark:border-slate-500'
-                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
-                              }`}
-                            style={{ WebkitTapHighlightColor: 'transparent' }}
-                          >
-                            {option === 'highest_score' ? 'Score' : option === 'questions' ? 'Questions' : option === 'taken_on' ? 'Taken on' : option === 'category' ? 'Category' : option === 'difficulty' ? 'Difficulty' : option}
-                            <span className="inline-flex w-3 justify-center">
-                              {isActive ? (
-                                isAsc ? (
-                                  <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10 5l4 6H6l4-6z" />
-                                  </svg>
-                                ) : (
-                                  <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10 15l-4-6h8l-4 6z" />
-                                  </svg>
-                                )
-                              ) : (
-                                <span className="h-3 w-3" />
+          {takenQuizzes.length > 0 ? (
+            <>
+              <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+                  <h2 className="text-2xl sm:text-3xl font-semibold text-slate-800">Quizzes Taken</h2>
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <div className="relative flex-1 sm:flex-none bg-slate-100/80 dark:bg-slate-800/40 rounded-2xl border border-slate-200/80 dark:border-slate-800/60 overflow-hidden group/taken-sort h-[40px]">
+                      <div className="flex items-center gap-1.5 p-1 h-full overflow-x-auto overflow-y-hidden no-scrollbar relative w-full">
+                        {['highest_score', 'category', 'difficulty', 'questions', 'taken_on'].map((option) => {
+                          const isActive = takenSortBy === option;
+                          const isAsc = isActive && takenSortDirection === "asc";
+                          const labels = {
+                            highest_score: 'Score',
+                            questions: 'Questions',
+                            taken_on: 'Taken on',
+                            category: 'Category',
+                            difficulty: 'Difficulty'
+                          };
+                          const widths = {
+                            highest_score: 'w-20',
+                            questions: 'w-20',
+                            taken_on: 'w-[84px]',
+                            category: 'w-20',
+                            difficulty: 'w-20'
+                          };
+                          return (
+                            <button
+                              key={option}
+                              disabled={isAccountLocked}
+                              onClick={() => {
+                                if (isActive) {
+                                  setTakenSortDirection(prev => prev === "desc" ? "asc" : "desc");
+                                } else {
+                                  setTakenSortBy(option);
+                                  setTakenSortDirection("desc");
+                                }
+                              }}
+                              className={`sorting-button ${isActive ? 'isActive' : ''} ${widths[option]} py-1.5 rounded-xl text-[10px] sm:text-xs font-semibold transition-all outline-none focus:outline-none focus:ring-0 active:scale-95 select-none flex items-center justify-center gap-1.5 shrink-0 ${isAccountLocked
+                                ? "opacity-50 text-slate-400"
+                                : isActive
+                                  ? 'bg-white dark:bg-slate-600 text-slate-800 dark:text-slate-100 shadow-sm border border-slate-200/80 dark:border-slate-500'
+                                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+                                }`}
+                              style={{ WebkitTapHighlightColor: 'transparent' }}
+                            >
+                              <span className="leading-none">{labels[option] || option}</span>
+                              {isActive && (
+                                <span className="flex items-center justify-center shrink-0">
+                                  {isAsc ? (
+                                    <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M10 5l4 6H6l4-6z" />
+                                    </svg>
+                                  ) : (
+                                    <svg className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M10 15l-4-6h8l-4 6z" />
+                                    </svg>
+                                  )}
+                                </span>
                               )}
-                            </span>
-                          </button>
-                        );
-                      })}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {/* Fixed Shadows for Mobile Scroll */}
+                      <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-slate-100/95 dark:from-slate-800/95 to-transparent pointer-events-none sm:hidden z-10" />
+                      <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-slate-100/95 dark:from-slate-800/95 to-transparent pointer-events-none sm:hidden z-10" />
                     </div>
-                    {/* Fixed Shadows for Mobile Scroll */}
-                    <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-slate-100/95 dark:from-slate-800/95 to-transparent pointer-events-none sm:hidden z-10" />
-                    <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-slate-100/95 dark:from-slate-800/95 to-transparent pointer-events-none sm:hidden z-10" />
-                  </div>
-                  <div className={`px-4 py-2.5 rounded-2xl border flex items-center h-[42px] cursor-default shrink-0 ${isAccountLocked ? 'bg-slate-50/80 border-slate-200/60 dark:bg-slate-900/40 dark:border-slate-800/40' : 'bg-slate-100/80 border-slate-200/80 dark:bg-slate-800/50 dark:border-slate-700/50'}`}>
-                    <span className={`font-semibold text-[10px] sm:text-xs whitespace-nowrap leading-none ${isAccountLocked ? 'text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-200'}`}>
-                      {takenQuizzes.length} {takenQuizzes.length === 1 ? 'quiz' : 'quizzes'}
-                    </span>
+                    <div className={`px-4 py-2.5 rounded-2xl border flex items-center h-[40px] cursor-default shrink-0 ${isAccountLocked ? 'bg-slate-50/80 border-slate-200/60 dark:bg-slate-900/40 dark:border-slate-800/40' : 'bg-slate-100/80 border-slate-200/80 dark:bg-slate-800/50 dark:border-slate-700/50'}`}>
+                      <span className={`font-semibold text-[10px] sm:text-xs whitespace-nowrap leading-none ${isAccountLocked ? 'text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-200'}`}>
+                        {takenQuizzes.length} {takenQuizzes.length === 1 ? 'quiz' : 'quizzes'}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {takenQuizzes.length > 0 && (
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
                   <div className="bg-white/50 dark:bg-slate-800/40 rounded-2xl p-4 border border-slate-200/60 dark:border-slate-700/40 text-center shadow-sm">
                     <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Favorite Topic</div>
@@ -1468,31 +1482,7 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 </div>
-              )}
 
-              {takenQuizzes.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="w-20 h-20 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-slate-800 mb-2">No Quizzes Yet</h3>
-                  <p className="text-slate-600">
-                    {isOwnProfile ? "Start taking quizzes to see your progress here" : `${profile.user_data.username} hasn't taken any quizzes yet`}
-                  </p>
-                  {isOwnProfile && !isAccountLocked && (
-                    <div className="mt-6">
-                      <Link
-                        to="/"
-                        className="inline-flex items-center justify-center rounded-xl bg-slate-800 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700"
-                      >
-                        Take a quiz
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[...takenQuizzes].sort((a, b) => {
                     if (takenSortBy === "highest_score") {
@@ -1698,16 +1688,39 @@ export default function ProfilePage() {
                     );
                   })}
                 </div>
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-20 h-20 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg className="w-10 h-10 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">No Quizzes Yet</h3>
+              <p className="text-slate-600">
+                {isOwnProfile ? "Start taking quizzes to see your progress here" : `${profile.user_data.username} hasn't taken any quizzes yet`}
+              </p>
+              {isOwnProfile && !isAccountLocked && (
+                <div className="mt-6">
+                  <Link
+                    to="/"
+                    className="inline-flex items-center justify-center rounded-xl bg-slate-800 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700"
+                  >
+                    Take a quiz
+                  </Link>
+                </div>
               )}
             </div>
-          </div>
+          )}
         </main>
         {selectedQuizForStats && (
           <QuizStats
             quiz={selectedQuizForStats}
             onClose={() => setSelectedQuizForStats(null)}
           />
-        )}
+        )
+        }
         {
           showDeleteConfirm && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/20 backdrop-blur-sm">

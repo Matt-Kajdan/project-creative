@@ -110,7 +110,16 @@ export default function UserSearchBar({ excludeUsername }) {
                 onClick={() => selectUser(u.username)}
                 className="w-full text-left px-4 py-5 text-sm text-slate-800 dark:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-900/60 flex items-center gap-3"
               >
-                <span>{u.username}</span>
+                {u.profile_pic && (
+                  <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-slate-200/80 dark:border-slate-700/60 flex-shrink-0">
+                    <img
+                      src={u.profile_pic}
+                      alt={u.username}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <span className="font-medium">{u.username}</span>
               </button>
             ))}
         </div>

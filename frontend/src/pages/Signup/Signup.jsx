@@ -97,8 +97,8 @@ export function Signup() {
         <div className="absolute bottom-1/4 right-1/4 w-[28rem] h-[28rem] bg-rose-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
         <div className="absolute top-1/2 left-1/2 w-[30rem] h-[30rem] -translate-x-1/2 -translate-y-1/2 bg-sky-200/25 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
-      <div className="relative min-h-screen pt-16 sm:pt-20">
-        <main className="relative max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      <div className="fixed inset-0 pt-16 pb-16 flex flex-col overflow-y-auto">
+        <main className="relative w-full max-w-md mx-auto px-4 sm:px-6 lg:px-8 my-auto">
           <div className="mb-6 text-center">
             <h1 className="text-3xl sm:text-4xl font-semibold text-slate-800 mb-2 select-none">Create your account</h1>
             <p className="text-slate-600">Join Quizr and start playing</p>

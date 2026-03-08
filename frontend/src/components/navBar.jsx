@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../services/firebase";
+import { logout } from "../services/authentication";
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../hooks/useTheme";
 import { useIsMobile } from "../hooks/useIsMobile";
@@ -198,7 +197,7 @@ function NavBar({ accountStatus, accountUsername }) {
             )}
             {user && (
               <button
-                onClick={() => signOut(auth)}
+                onClick={() => logout()}
                 className="bg-slate-800 dark:bg-slate-900 text-white dark:text-slate-100 px-4 py-2 rounded-xl text-sm font-semibold shadow-sm transition-colors hover:bg-slate-700 dark:hover:bg-slate-700"
               >
                 Sign out

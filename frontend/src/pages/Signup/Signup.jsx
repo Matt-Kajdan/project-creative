@@ -4,6 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { signup } from "../../services/authentication";
 import { apiFetch } from "../../services/api";
+import { useUser } from "../../hooks/useUser";
 
 const RAW_BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
 const NORMALIZED_BASE = RAW_BACKEND_URL.replace(/\/$/, "");
@@ -18,19 +19,33 @@ export function Signup() {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
 
+  const { refreshUser } = useUser();
+  const [isSigningUp, setIsSigningUp] = useState(false);
+
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
-      if (user) navigate("/")
-    })
-    return unsub
-  }, [navigate])
+      // Only auto-redirect if a signup is NOT currently in progress.
+      // If signing up, we handle navigation manually after the backend creates the DB document.
+      if (user && !isSigningUp) {
+        navigate("/");
+      }
+    });
+    return unsub;
+  }, [navigate, isSigningUp]);
 
   async function handleSubmit(event) {
     event.preventDefault();
     setError(null);
+    setIsSigningUp(true);
     try {
       if (!username.trim()) {
         setError("Username is required");
+        setIsSigningUp(false);
+        return;
+      }
+      if (password.length < 12) {
+        setError("Password must be at least 12 characters long");
+        setIsSigningUp(false);
         return;
       }
       const availabilityRes = await fetch(
@@ -59,10 +74,12 @@ export function Signup() {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.message || "Unable to create user");
       }
-      // onAuthStateChanged redirects on its own, but to be safe:
-      // navigate("/")
+      // The backend user is now created. Refresh the global context before redirecting.
+      await refreshUser();
+      navigate("/");
     } catch (err) {
       setError(err.message || "Signup failed");
+      setIsSigningUp(false);
     }
   }
 
@@ -80,8 +97,8 @@ export function Signup() {
         <div className="absolute bottom-1/4 right-1/4 w-[28rem] h-[28rem] bg-rose-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
         <div className="absolute top-1/2 left-1/2 w-[30rem] h-[30rem] -translate-x-1/2 -translate-y-1/2 bg-sky-200/25 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
-      <div className="relative min-h-screen pt-16 sm:pt-20">
-        <main className="relative max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      <div className="fixed inset-0 pt-16 pb-16 flex flex-col overflow-y-auto">
+        <main className="relative w-full max-w-md mx-auto px-4 sm:px-6 lg:px-8 my-auto">
           <div className="mb-6 text-center">
             <h1 className="text-3xl sm:text-4xl font-semibold text-slate-800 mb-2 select-none">Create your account</h1>
             <p className="text-slate-600">Join Quizr and start playing</p>
@@ -112,7 +129,9 @@ export function Signup() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="mt-2 w-full rounded-xl border border-slate-200/80 bg-white/70 px-4 py-3 text-slate-700 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-300/70"
+                minLength={12}
               />
+              <p className="text-xs text-slate-500 mt-1 pl-1">Must be at least 12 characters long.</p>
               <input
                 role="submit-button"
                 id="submit"

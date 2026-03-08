@@ -44,6 +44,12 @@ export const ThemeProvider = ({ children }) => {
             if (!mounted) return;
             setTheme(userTheme);
             localStorage.setItem("theme", userTheme);
+          } else {
+            // New or logged-in users without a saved preference should default to light
+            // instead of inheriting the previous user's local storage.
+            if (!mounted) return;
+            setTheme("light");
+            localStorage.setItem("theme", "light");
           }
         }
       } catch (error) {
@@ -52,7 +58,12 @@ export const ThemeProvider = ({ children }) => {
     };
 
     const unsub = onAuthStateChanged(auth, (user) => {
-      if (!user) return;
+      // If the user logs out, clean up local storage and reset the theme immediately
+      if (!user) {
+        setTheme("light");
+        localStorage.removeItem("theme");
+        return;
+      }
       loadTheme();
     });
 
@@ -105,6 +116,45 @@ export const ThemeProvider = ({ children }) => {
       saveThemeToAPI(newTheme);
     }, 5000);
   };
+
+  // Flush pending changes using keepalive when the user closes the tab
+  useEffect(() => {
+    const handleVisibilityChange = async () => {
+      if (document.visibilityState === "hidden" && isPendingSave) {
+        if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+        const currentTheme = localStorage.getItem("theme");
+        if (!currentTheme || !auth.currentUser) return;
+        
+        try {
+          const token = await auth.currentUser.getIdToken();
+          const RAW_BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
+          const NORMALIZED_BASE = RAW_BACKEND_URL.replace(/\/$/, "");
+          const BACKEND_URL = NORMALIZED_BASE
+            ? (NORMALIZED_BASE.endsWith("/api") ? NORMALIZED_BASE : `${NORMALIZED_BASE}/api`)
+            : "/api";
+
+          // Use keepalive: true so the browser guarantees delivery even after page is closed
+          fetch(`${BACKEND_URL}/me/theme`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ theme: currentTheme }),
+            keepalive: true
+          });
+          setIsPendingSave(false);
+        } catch (error) {
+          console.error("Failed to sync theme to backend during unload:", error);
+        }
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [isPendingSave]);
 
   // Cleanup timeout on unmount
   useEffect(() => {

@@ -178,8 +178,8 @@ export default function SettingsPage() {
       return;
     }
 
-    if (newPassword.length < 6) {
-      setError("Password must be at least 6 characters");
+    if (newPassword.length < 12) {
+      setError("Password must be at least 12 characters");
       return;
     }
 
@@ -270,7 +270,7 @@ export default function SettingsPage() {
         <div className="absolute top-1/2 left-1/2 w-[30rem] h-[30rem] -translate-x-1/2 -translate-y-1/2 bg-sky-200/25 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
       </div>
       <div className="relative min-h-screen pt-16 sm:pt-20">
-        <main className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <main className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <h1 className="text-4xl font-semibold text-slate-800 mb-8">
             Settings
           </h1>
@@ -402,7 +402,7 @@ export default function SettingsPage() {
                   placeholder="Enter new password"
                   disabled={isAccountLocked}
                   className="w-full px-4 py-3 bg-white/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/70 dark:focus:ring-slate-700/50 disabled:opacity-50"
-                  minLength={6}
+                  minLength={12}
                 />
               </div>
               <div>
@@ -414,7 +414,7 @@ export default function SettingsPage() {
                   placeholder="Confirm new password"
                   disabled={isAccountLocked}
                   className="w-full px-4 py-3 bg-white/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/70 dark:focus:ring-slate-700/50 disabled:opacity-50"
-                  minLength={6}
+                  minLength={12}
                 />
               </div>
               <button

@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { signup } from "../../services/authentication";
 import { apiFetch } from "../../services/api";
 import { useUser } from "../../hooks/useUser";
+import { PasswordInput } from "../../components/PasswordInput";
 
 const RAW_BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
 const NORMALIZED_BASE = RAW_BACKEND_URL.replace(/\/$/, "");
@@ -123,12 +124,10 @@ export function Signup() {
                 className="mt-2 w-full rounded-xl border border-slate-200/80 bg-white/70 px-4 py-3 text-slate-700 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-300/70"
               />
               <label htmlFor="password" className="block text-sm text-slate-600">Password</label>
-              <input
+              <PasswordInput
                 id="password"
-                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-2 w-full rounded-xl border border-slate-200/80 bg-white/70 px-4 py-3 text-slate-700 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-300/70"
                 minLength={12}
               />
               <p className="text-xs text-slate-500 mt-1 pl-1">Must be at least 12 characters long.</p>

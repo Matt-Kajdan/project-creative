@@ -3,6 +3,7 @@ import { auth } from "../../services/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { login, forgotPassword } from "../../services/authentication";
+import { PasswordInput } from "../../components/PasswordInput";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -134,12 +135,10 @@ export function Login() {
                     className="mt-2 w-full rounded-xl border border-slate-200/80 bg-white/70 px-4 py-3 text-slate-700 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-300/70"
                   />
                   <label htmlFor="password" className="block text-sm text-slate-600">Password</label>
-                  <input
+                  <PasswordInput
                     id="password"
-                    type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="mt-2 w-full rounded-xl border border-slate-200/80 bg-white/70 px-4 py-3 text-slate-700 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-300/70"
                   />
                   <div className="flex justify-end -mt-2">
                     <button

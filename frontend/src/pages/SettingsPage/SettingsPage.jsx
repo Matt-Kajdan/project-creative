@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, updatePassword, updateEmail, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import { PasswordInput } from "../../components/PasswordInput";
 import { auth } from "../../services/firebase";
 import { apiFetch } from "../../services/api";
 import { scheduleAccountDeletion } from "../../services/users";
@@ -23,8 +24,11 @@ export default function SettingsPage() {
   const [profileSaving, setProfileSaving] = useState(false);
   const [emailSaving, setEmailSaving] = useState(false);
   const [passwordSaving, setPasswordSaving] = useState(false);
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(null);
+  const [profileError, setProfileError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [emailMessage, setEmailMessage] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [passwordMessage, setPasswordMessage] = useState(null);
   const [deletionMode, setDeletionMode] = useState(null);
   const [deletionStep, setDeletionStep] = useState("intro");
   const [deletionSaving, setDeletionSaving] = useState(false);
@@ -118,7 +122,7 @@ export default function SettingsPage() {
       await loadProfile();
       await refreshUser();
     } catch (err) {
-      setError(err.message);
+      setProfileError(err.message);
     } finally {
       setProfileSaving(false);
     }
@@ -127,18 +131,18 @@ export default function SettingsPage() {
   async function handleUpdateEmail(e) {
     e.preventDefault();
     if (isAccountLocked) return;
-    setError(null);
-    setMessage(null);
+    setEmailError(null);
+    setEmailMessage(null);
     setEmailSaving(true);
 
     try {
       if (newEmail === loggedInUser.email) {
-        setError("This is already your current email");
+        setEmailError("This is already your current email");
         setEmailSaving(false);
         return;
       }
       if (!currentEmailPassword) {
-        setError("Please enter your current password to change email");
+        setEmailError("Please enter your current password to change email");
         setEmailSaving(false);
         return;
       }
@@ -148,19 +152,19 @@ export default function SettingsPage() {
       );
       await reauthenticateWithCredential(loggedInUser, credential);
       await updateEmail(loggedInUser, newEmail);
-      setMessage("Email updated successfully!");
+      setEmailMessage("Email updated successfully!");
       setCurrentEmailPassword("");
     } catch (err) {
       if (err.code === 'auth/requires-recent-login') {
-        setError("Please log out and log back in before changing your email");
+        setEmailError("Please log out and log back in before changing your email");
       } else if (err.code === 'auth/invalid-email') {
-        setError("Invalid email address");
+        setEmailError("Invalid email address");
       } else if (err.code === 'auth/email-already-in-use') {
-        setError("This email is already in use");
+        setEmailError("This email is already in use");
       } else if (err.code === 'auth/wrong-password') {
-        setError("Current password is incorrect");
+        setEmailError("Current password is incorrect");
       } else {
-        setError(err.message || "Failed to update email");
+        setEmailError(err.message || "Failed to update email");
       }
     } finally {
       setEmailSaving(false);
@@ -170,21 +174,21 @@ export default function SettingsPage() {
   async function handleUpdatePassword(e) {
     e.preventDefault();
     if (isAccountLocked) return;
-    setError(null);
-    setMessage(null);
+    setPasswordError(null);
+    setPasswordMessage(null);
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords don't match");
+      setPasswordError("Passwords don't match");
       return;
     }
 
     if (newPassword.length < 12) {
-      setError("Password must be at least 12 characters");
+      setPasswordError("Password must be at least 12 characters");
       return;
     }
 
     if (!currentPassword) {
-      setError("Please enter your current password");
+      setPasswordError("Please enter your current password");
       return;
     }
 
@@ -197,17 +201,17 @@ export default function SettingsPage() {
       );
       await reauthenticateWithCredential(loggedInUser, credential);
       await updatePassword(loggedInUser, newPassword);
-      setMessage("Password updated successfully!");
+      setPasswordMessage("Password updated successfully!");
       setNewPassword("");
       setConfirmPassword("");
       setCurrentPassword("");
     } catch (err) {
       if (err.code === 'auth/wrong-password') {
-        setError("Current password is incorrect");
+        setPasswordError("Current password is incorrect");
       } else if (err.code === 'auth/too-many-requests') {
-        setError("Too many failed attempts. Please try again later.");
+        setPasswordError("Too many failed attempts. Please try again later.");
       } else {
-        setError(err.message || "Failed to update password");
+        setPasswordError(err.message || "Failed to update password");
       }
     } finally {
       setPasswordSaving(false);
@@ -288,15 +292,8 @@ export default function SettingsPage() {
               </div>
             </div>
           )}
-          {message && (
-            <div className="mb-6 bg-emerald-100/70 border border-emerald-200/80 rounded-2xl p-4 backdrop-blur">
-              <p className="text-emerald-700">{message}</p>
-            </div>
-          )}
-          {error && (
-            <div className="mb-6 bg-rose-100/80 border border-rose-200/80 rounded-2xl p-4 backdrop-blur">
-              <p className="text-rose-700">{error}</p>
-            </div>
+          {profileError && (
+            <p className="mb-4 text-sm text-rose-600">{profileError}</p>
           )}
           <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 mb-6 shadow-sm">
             <h2 className="text-2xl font-semibold text-slate-800 mb-6">Profile Information</h2>
@@ -359,14 +356,14 @@ export default function SettingsPage() {
               </div>
               <div>
                 <label className="block text-slate-600 mb-2">Current Password (required for security)</label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={currentEmailPassword}
                   onChange={(e) => setCurrentEmailPassword(e.target.value)}
                   placeholder="Enter current password"
                   disabled={isAccountLocked}
-                  className="w-full px-4 py-3 bg-white/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/70 dark:focus:ring-slate-700/50 disabled:opacity-50"
                   required
+                  autoComplete="new-password"
+                  inputClassName="w-full px-4 py-3 pr-12 bg-white/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/70 dark:focus:ring-slate-700/50 disabled:opacity-50"
                 />
               </div>
               <button
@@ -376,6 +373,8 @@ export default function SettingsPage() {
               >
                 {emailSaving ? "Updating..." : "Update Email"}
               </button>
+              {emailError && <p className="mt-2 text-sm text-rose-600">{emailError}</p>}
+              {emailMessage && <p className="mt-2 text-sm text-emerald-600">{emailMessage}</p>}
             </form>
           </div>
           <div className="bg-white/70 dark:bg-slate-900/40 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800/60 shadow-sm">
@@ -383,39 +382,36 @@ export default function SettingsPage() {
             <form onSubmit={handleUpdatePassword} className="space-y-4">
               <div>
                 <label className="block text-slate-600 mb-2">Current Password</label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Enter current password"
                   disabled={isAccountLocked}
-                  className="w-full px-4 py-3 bg-white/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/70 dark:focus:ring-slate-700/50 disabled:opacity-50"
                   required
+                  inputClassName="w-full px-4 py-3 pr-12 bg-white/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/70 dark:focus:ring-slate-700/50 disabled:opacity-50"
                 />
               </div>
               <div>
                 <label className="block text-slate-600 mb-2">New Password</label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Enter new password"
                   disabled={isAccountLocked}
-                  className="w-full px-4 py-3 bg-white/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/70 dark:focus:ring-slate-700/50 disabled:opacity-50"
                   minLength={12}
+                  inputClassName="w-full px-4 py-3 pr-12 bg-white/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/70 dark:focus:ring-slate-700/50 disabled:opacity-50"
                 />
                 <p className="text-xs text-slate-500 mt-1 pl-1">Must be at least 12 characters long.</p>
               </div>
               <div>
                 <label className="block text-slate-600 mb-2">Confirm Password</label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm new password"
                   disabled={isAccountLocked}
-                  className="w-full px-4 py-3 bg-white/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/70 dark:focus:ring-slate-700/50 disabled:opacity-50"
                   minLength={12}
+                  inputClassName="w-full px-4 py-3 pr-12 bg-white/70 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 rounded-xl text-slate-700 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/70 dark:focus:ring-slate-700/50 disabled:opacity-50"
                 />
               </div>
               <button
@@ -425,6 +421,8 @@ export default function SettingsPage() {
               >
                 {passwordSaving ? "Updating..." : "Change Password"}
               </button>
+              {passwordError && <p className="mt-2 text-sm text-rose-600">{passwordError}</p>}
+              {passwordMessage && <p className="mt-2 text-sm text-emerald-600">{passwordMessage}</p>}
             </form>
           </div>
           {!isAccountLocked && (
